@@ -1,23 +1,14 @@
-import {Link as RouterLink, useNavigate} from 'react-router-dom';
+import {Link as RouterLink} from 'react-router-dom';
 import React, {useCallback, useState} from 'react';
-import {useDispatch} from 'react-redux';
 import {Alert, Box, Button, CircularProgress, Container, Paper, Stack, Typography,} from '@mui/material';
 import {Google} from '@mui/icons-material';
 import {motion} from 'framer-motion';
 import dailySaleLogo from '../../assets/img/daily_sale_logo.png';
-import {AppDispatch} from '../../store/store';
-import {useCookieFunctions} from "../../components/common/hooks/useCookieFunctions";
 
-interface ErrorResponse {
-    message: string;
-}
 
 export function SignIn() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch<AppDispatch>();
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const { setCookie } = useCookieFunctions();
 
     const handleGoogleLogin = useCallback(() => {
         setIsLoading(true);

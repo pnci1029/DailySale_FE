@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Typography, Paper, Box } from '@mui/material';
-import { ComponentHelmet } from "../../features/common/ComponentHelmet";
+import { ComponentHelmet } from "../../components/common/ComponentHelmet";
 import styles from './Legal.module.scss';
 
 export const PrivacyPolicy: React.FC = () => {
@@ -129,7 +129,7 @@ export const PrivacyPolicy: React.FC = () => {
           </Typography>
         </Box>
       </Paper>
-      <ComponentHelmet title={"Koreer - 개인정보처리방침"} />
+      <ComponentHelmet title={"Daily Sale - 개인정보처리방침"} />
     </Container>
   );
 };

@@ -8,7 +8,7 @@ import {CommunityCategory} from "./CommunityCategory";
 import {CommunityEmpty} from "./CommunityEmpty";
 import {CommunityCategories} from "../../types/community";
 import {useCommunityGetter} from "../../components/community/hooks/useCommunityGetter";
-import {ComponentHelmet} from "../../features/common/ComponentHelmet";
+import {ComponentHelmet} from "../../components/common/ComponentHelmet";
 
 const StyledHeader = styled(Box)(({ theme }) => ({
     textAlign: 'center',
@@ -201,7 +201,7 @@ export function Community() {
                         )}
                     </Box>
                 </motion.div>
-                <ComponentHelmet title="Koreer - 커뮤니티" />
+                <ComponentHelmet title="Daily Sale - 커뮤니티" />
             </Container>
         </>
     );

@@ -34,7 +34,7 @@ import {
     AccessTime,
 } from '@mui/icons-material';
 import React, { useState, useEffect } from 'react';
-import { ComponentHelmet } from "../features/common/ComponentHelmet";
+import { ComponentHelmet } from "../components/common/ComponentHelmet";
 import { ApiResponse, UserInfoDTO } from '@/types/userInfo';
 import { UserDTO } from '@/types/auth';
 import { useCommonFunctions } from "../components/common/hooks/useCommonFunctions";
@@ -570,7 +570,7 @@ export function MyPage() {
                     </Paper>
                 </motion.div>
             )}
-            <ComponentHelmet title={"Koreer - 마이페이지"} />
+            <ComponentHelmet title={"Daily Sale - 마이페이지"} />
         </Container>
     );
 }

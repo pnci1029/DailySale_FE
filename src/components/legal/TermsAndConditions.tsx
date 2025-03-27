@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Typography, Paper, Box } from '@mui/material';
-import { ComponentHelmet } from "../../features/common/ComponentHelmet";
+import { ComponentHelmet } from "../../components/common/ComponentHelmet";
 import styles from './Legal.module.scss';
 
 export const TermsAndConditions: React.FC = () => {
@@ -19,7 +19,7 @@ export const TermsAndConditions: React.FC = () => {
             제1조 (목적)
           </Typography>
           <Typography paragraph>
-            이 약관은 Koreer(이하 "회사")가 제공하는 해외 취업 정보 서비스(이하 "서비스")의 이용조건 및 절차, 회사와 회원 간의 권리, 의무 및 책임사항 등을 규정함을 목적으로 합니다.
+            이 약관은 Daily Sale(이하 "회사")가 제공하는 해외 취업 정보 서비스(이하 "서비스")의 이용조건 및 절차, 회사와 회원 간의 권리, 의무 및 책임사항 등을 규정함을 목적으로 합니다.
           </Typography>
         </Box>
 
@@ -123,7 +123,7 @@ export const TermsAndConditions: React.FC = () => {
           </Typography>
         </Box>
       </Paper>
-      <ComponentHelmet title={"Koreer - 이용약관"} />
+      <ComponentHelmet title={"Daily Sale - 이용약관"} />
     </Container>
   );
 };
