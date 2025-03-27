@@ -2,62 +2,84 @@ import React, {useState} from 'react';
 import {Alert, Box, Button, Container, Grid, Paper, Snackbar, TextField, Typography,} from '@mui/material';
 import {motion} from 'framer-motion';
 import {styled} from '@mui/material/styles';
-import koreerLogo from '../../assets/img/koreer_logo_cropped.png';
+import dailySaleLogo from '../../assets/img/daily_sale_logo.png';
 import {CloudBackground} from './CloudBackground';
 import {ParticleBackground} from './ParticleBackground';
-import {Business, Code, Explore, Language, Send, TrendingUp,} from '@mui/icons-material';
+import {Discount, LocalOffer, NotificationsActive, PriceCheck, ShoppingCart} from '@mui/icons-material';
 import {ComponentHelmet} from "../../components/common/ComponentHelmet";
 import {ChatBot} from "../../components/common/main/ChatBot";
 
 interface FormData {
-  email: string;
-  topics: string;
+    email: string;
+    topics: string;
 }
 
 // Styled Components
 const Logo = styled('img')`
-  width: 300px;  // 200px에서 300px로 증가
-  height: auto;
-  margin-bottom: 1rem;  // 2rem에서 3rem으로 증가
+    width: 180px;
+    height: auto;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 4px 8px rgba(242, 151, 39, 0.3));
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: scale(1.05) rotate(2deg);
+        filter: drop-shadow(0 6px 12px rgba(242, 151, 39, 0.4));
+    }
 `;
 
 const StyledPaper = styled(Paper)`
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease-in-out;
-  z-index: 3;
-  padding: 3rem;  // 2rem에서 3rem으로 증가
-  border-radius: 20px;  // 16px에서 20px로 증가
-  border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease-in-out;
+    z-index: 3;
+    padding: 3rem;
+    border-radius: 20px;
+    border: 2px solid rgba(242, 151, 39, 0.4);
+    box-shadow: 0 8px 25px rgba(242, 151, 39, 0.2);
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);  // 그림자 강화
-  }
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(242, 151, 39, 0.25);
+        border: 2px solid rgba(242, 151, 39, 0.6);
+    }
 `;
 
 const FeatureCard = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(3),
     height: '100%',
-    background: 'rgba(255, 255, 255, 0.9)',
+    background: 'rgba(255, 255, 255, 0.85)',
     backdropFilter: 'blur(10px)',
     borderRadius: '20px',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
+    border: '1px solid rgba(242, 151, 39, 0.2)',
     transition: 'all 0.3s ease-in-out',
+    overflow: 'hidden',
+    position: 'relative',
+    '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '5px',
+        background: 'linear-gradient(90deg, #F29727, #FFCD00)',
+    },
     '&:hover': {
-        transform: 'translateY(-5px)',
-        boxShadow: '0 15px 40px rgba(0, 0, 0, 0.1)'
+        transform: 'translateY(-5px) scale(1.02)',
+        boxShadow: '0 15px 30px rgba(242, 151, 39, 0.2)',
+        '& .MuiSvgIcon-root': {
+            transform: 'scale(1.1) rotate(5deg)',
+        }
     }
 }));
 
 export default function Main() {
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-    topics: 'tech-trend',
-    // category: TopicCategory.TECH,
-  });
-  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+    const [formData, setFormData] = useState<FormData>({
+        email: '',
+        topics: 'daily-sale',
+    });
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -115,222 +137,331 @@ export default function Main() {
 
     const features = [
         {
-            icon: <TrendingUp color="primary" sx={{ fontSize: 40 }}/>,
-            title: "실리콘밸리 최신 동향",
-            description: "빅테크 기업의 핵심 채용 및 연봉 트렌드를 한눈에"
+            icon: <Discount sx={{ fontSize: 40, color: '#F29727' }}/>,
+            title: "오늘의 특가 세일",
+            description: "매일 업데이트되는 다양한 카테고리의 최저가 특가 정보"
         },
         {
-            icon: <Language color="primary" sx={{ fontSize: 40 }}/>,
-            title: "개발자 비즈니스 영어",
-            description: "실무에서 바로 통하는 전문 개발자 영어 표현"
+            icon: <ShoppingCart sx={{ fontSize: 40, color: '#F29727' }}/>,
+            title: "쇼핑몰 쿠폰 정보",
+            description: "주요 쇼핑몰의 할인 쿠폰 및 프로모션 코드 안내"
         },
         {
-            icon: <Business color="primary" sx={{ fontSize: 40 }}/>,
-            title: "기업 인사이트",
-            description: "대기업 기술 스택, 면접 공략법, 합격 전략 공개"
+            icon: <LocalOffer sx={{ fontSize: 40, color: '#F29727' }}/>,
+            title: "카테고리별 할인",
+            description: "식품, 생활용품, 가전제품 등 분야별 맞춤 할인 정보"
         },
         {
-            icon: <Explore color="primary" sx={{ fontSize: 40 }}/>,
-            title: "실리콘밸리 라이프",
-            description: "현지 문화와 개발자 생활의 생생한 리얼 가이드"
+            icon: <NotificationsActive sx={{ fontSize: 40, color: '#F29727' }}/>,
+            title: "타임세일 알림",
+            description: "놓치면 후회하는 파격 타임세일 실시간 알림 서비스"
         },
         {
-            icon: <Code color="primary" sx={{ fontSize: 40 }}/>,
-            title: "최신 기술 트렌드",
-            description: "AI, 클라우드, 혁신 기술의 최전선 르포르타주"
+            icon: <PriceCheck sx={{ fontSize: 40, color: '#F29727' }}/>,
+            title: "가격 비교 분석",
+            description: "동일 상품의 플랫폼별 가격 비교로 현명한 소비 안내"
         }
     ];
 
-  return (
-      <Box sx={{
-        minHeight: '100vh',
-        pt: { xs: 8, md: 12 },
-        pb: { xs: 8, md: 12 },
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        <ParticleBackground />
-        <CloudBackground />
+    return (
+        <Box sx={{
+            minHeight: '100vh',
+            pt: { xs: 8, md: 12 },
+            pb: { xs: 8, md: 12 },
+            background: 'linear-gradient(135deg, #FFF4D2 0%, #FFE8B3 100%)',
+            position: 'relative',
+            overflow: 'hidden'
+        }}>
+            <ParticleBackground />
+            <CloudBackground />
 
-        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
-          <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-          >
-            <Box textAlign="center" mb={12}>
-              <Logo src={koreerLogo} alt="Koreer Logo" />
-              <Typography
-                  variant="h2"
-                  gutterBottom
-                  sx={{
-                    fontWeight: 'bold',
-                    fontSize: { xs: '2.5rem', md: '3.2rem' }
-                  }}
-              >
-                실리콘밸리의 모든 것
-              </Typography>
-              <Typography
-                  variant="h3"
-                  gutterBottom
-                  color="primary"
-                  sx={{ fontSize: { xs: '2rem', md: '2.5rem' } }}
-              >
-                매일 아침 메일로 받아보세요
-              </Typography>
-              <Typography
-                  variant="h6"
-                  color="text.secondary"
-                  mb={6}
-                  sx={{
-                    lineHeight: 1.8,
-                    fontSize: { xs: '1.1rem', md: '1.3rem' }
-                  }}
-              >
-                현지 개발자들의 생생한 이야기부터<br />
-                실전 면접 준비까지, 여러분의 커리어를 함께 만들어갑니다
-              </Typography>
+            {/* 추가 애니메이션 요소들 */}
+            <Box sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 1,
+                overflow: 'hidden',
+                pointerEvents: 'none'
+            }}>
+                {/* 떨어지는 할인 태그 애니메이션 */}
+                {Array.from({ length: 15 }).map((_, index) => (
+                    <Box
+                        key={`discount-tag-${index}`}
+                        sx={{
+                            position: 'absolute',
+                            left: `${Math.random() * 100}%`,
+                            top: `-100px`,
+                            color: index % 3 === 0 ? '#F29727' : index % 3 === 1 ? '#FFCD00' : '#FFA41B',
+                            fontSize: `${Math.random() * 30 + 20}px`,
+                            opacity: 0.6,
+                            transform: `rotate(${Math.random() * 60 - 30}deg)`,
+                            animation: `fall ${Math.random() * 20 + 10}s linear ${Math.random() * 10}s infinite`,
+                            '@keyframes fall': {
+                                '0%': {
+                                    transform: `translateY(0) rotate(${Math.random() * 60 - 30}deg)`,
+                                    opacity: 0
+                                },
+                                '10%': {
+                                    opacity: 0.6
+                                },
+                                '90%': {
+                                    opacity: 0.6
+                                },
+                                '100%': {
+                                    transform: `translateY(${window.innerHeight + 200}px) rotate(${Math.random() * 360}deg)`,
+                                    opacity: 0
+                                }
+                            }
+                        }}
+                    >
+                        {index % 5 === 0 ? '🏷️' : index % 5 === 1 ? '💰' : index % 5 === 2 ? '🛒' : index % 5 === 3 ? '🔖' : '💯'}
+                    </Box>
+                ))}
+
+                {/* 반짝이는 별 효과 */}
+                {Array.from({ length: 20 }).map((_, index) => (
+                    <Box
+                        key={`star-${index}`}
+                        sx={{
+                            position: 'absolute',
+                            left: `${Math.random() * 100}%`,
+                            top: `${Math.random() * 100}%`,
+                            width: `${Math.random() * 10 + 3}px`,
+                            height: `${Math.random() * 10 + 3}px`,
+                            borderRadius: '50%',
+                            backgroundColor: index % 2 === 0 ? '#FFCD00' : '#F29727',
+                            animation: `twinkle ${Math.random() * 4 + 2}s ease-in-out ${Math.random() * 2}s infinite alternate`,
+                            '@keyframes twinkle': {
+                                '0%': {
+                                    opacity: 0.3,
+                                    transform: 'scale(1)'
+                                },
+                                '100%': {
+                                    opacity: 0.8,
+                                    transform: 'scale(1.5)'
+                                }
+                            }
+                        }}
+                    />
+                ))}
             </Box>
 
-              <Grid container spacing={6} justifyContent="center">
-                  <Grid item xs={12} md={8}>
-                      <StyledPaper elevation={3}>
-                          <Box textAlign="center" mb={6}>
-                              <Typography variant="h4" gutterBottom fontWeight="bold">
-                                  매주 큐레이션된 실리콘밸리 소식
-                              </Typography>
-                              <Typography variant="h6" color="text.secondary">
-                                  현지 개발자들이 직접 전하는 생생한 정보를 받아보세요
-                              </Typography>
-                          </Box>
+            <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Box textAlign="center" mb={12}>
+                        <Logo src={dailySaleLogo} alt="Daily Sale Logo" />
+                        <Typography
+                            variant="h2"
+                            gutterBottom
+                            sx={{
+                                fontWeight: 'bold',
+                                fontSize: { xs: '2.5rem', md: '3.2rem' },
+                                background: 'linear-gradient(45deg, #F29727 30%, #FFCD00 90%)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                            }}
+                        >
+                            매일 세상의 모든 할인정보
+                        </Typography>
+                        <Typography
+                            variant="h3"
+                            gutterBottom
+                            sx={{
+                                fontSize: { xs: '2rem', md: '2.5rem' },
+                                color: '#F29727'
+                            }}
+                        >
+                            이메일로 한번에 받아보세요
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            color="text.secondary"
+                            mb={6}
+                            sx={{
+                                lineHeight: 1.8,
+                                fontSize: { xs: '1.1rem', md: '1.3rem' }
+                            }}
+                        >
+                            특가 세일부터 숨겨진 할인 코드까지<br />
+                            현명한 소비를 위한 모든 정보를 매일 아침 전해드립니다
+                        </Typography>
+                    </Box>
 
-                          <Grid container spacing={3} sx={{ mb: 6 }}>
-                              {features.map((feature, index) => (
-                                  <Grid item xs={12} sm={6} md={4} key={index}>
-                                      <motion.div
-                                          initial={{ opacity: 0, y: 20 }}
-                                          animate={{ opacity: 1, y: 0 }}
-                                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                                      >
-                                          <FeatureCard>
-                                              <Box sx={{ textAlign: 'center', mb: 2 }}>
-                                                  {feature.icon}
-                                              </Box>
-                                              <Typography variant="h6" fontWeight="bold" gutterBottom>
-                                                  {feature.title}
-                                              </Typography>
-                                              <Typography variant="body2" color="text.secondary">
-                                                  {feature.description}
-                                              </Typography>
-                                          </FeatureCard>
-                                      </motion.div>
-                                  </Grid>
-                              ))}
-                          </Grid>
+                    <Grid container spacing={6} justifyContent="center">
+                        <Grid item xs={12} md={8}>
+                            <StyledPaper elevation={3}>
+                                <Box textAlign="center" mb={6}>
+                                    <Typography
+                                        variant="h4"
+                                        gutterBottom
+                                        fontWeight="bold"
+                                        sx={{ color: '#F29727' }}
+                                    >
+                                        매일 큐레이션된 할인 정보
+                                    </Typography>
+                                    <Typography variant="h6" color="text.secondary">
+                                        세일 정보를 찾아 헤매는 시간을 아껴드립니다
+                                    </Typography>
+                                </Box>
 
-                          <form onSubmit={handleSubmit}>
-                              <Box sx={{position: 'relative'}}>
-                                  <TextField
-                                      fullWidth
-                                      variant="outlined"
-                                      placeholder="이메일 주소를 입력하세요"
-                                      value={formData.email}
-                                      onChange={(e) => {
-                                          setFormData(prev => ({
-                                              ...prev,
-                                              email: e.target.value
-                                          }));
-                                          setError(''); // 입력 시 오류 메시지 초기화
-                                      }}
-                                      error={!!error}
-                                      sx={{
-                                          '& .MuiOutlinedInput-root': {
-                                              height: '60px',
-                                              fontSize: '1.1rem'
-                                          }
-                                      }}
-                                  />
-                                  {error && (
-                                      <Typography
-                                          color="error"
-                                          variant="body2"
-                                          sx={{
-                                              position: 'absolute',
-                                              mt: 1,
-                                              ml: 2,
-                                              fontSize: '0.875rem'
-                                          }}
-                                      >
-                                          {error}
-                                      </Typography>
-                                  )}
-                              </Box>
-                              <Box sx={{display: 'flex', gap: 2, mt: error ? 3 : 2}}>
-                                  <Button
-                                      type="submit"
-                                      variant="contained"
-                                      fullWidth
-                                      size="large"
-                                      endIcon={<Send/>}
-                                      sx={{
-                                          background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-                                          color: 'white',
-                                          height: '60px',
-                                          fontSize: '1.1rem'
-                                      }}
-                                  >
-                                      구독하기
-                                  </Button>
-                              </Box>
-                          </form>
-                      </StyledPaper>
-                  </Grid>
-              </Grid>
-          </motion.div>
-        </Container>
+                                <Grid container spacing={3} sx={{ mb: 6 }}>
+                                    {features.map((feature, index) => (
+                                        <Grid item xs={12} sm={6} md={4} key={index}>
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                            >
+                                                <FeatureCard>
+                                                    <Box sx={{
+                                                        textAlign: 'center',
+                                                        mb: 2,
+                                                        '& .MuiSvgIcon-root': {
+                                                            transition: 'all 0.3s ease',
+                                                            filter: 'drop-shadow(0 3px 5px rgba(242, 151, 39, 0.3))'
+                                                        }
+                                                    }}>
+                                                        {feature.icon}
+                                                    </Box>
+                                                    <Typography
+                                                        variant="h6"
+                                                        fontWeight="bold"
+                                                        gutterBottom
+                                                        sx={{ color: '#333' }}
+                                                    >
+                                                        {feature.title}
+                                                    </Typography>
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        {feature.description}
+                                                    </Typography>
+                                                </FeatureCard>
+                                            </motion.div>
+                                        </Grid>
+                                    ))}
+                                </Grid>
 
-          <Snackbar
-              open={openSnackbar}
-              autoHideDuration={3000}
-              onClose={() => setOpenSnackbar(false)}
-              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-              sx={{
-                  top: '30% !important',
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-              }}
-          >
-              <Alert
-                  severity="success"
-                  sx={{
-                      width: 'auto',
-                      minWidth: '400px',
-                      background: 'linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%)',
-                      color: 'white',
-                      borderRadius: '12px',
-                      boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-                      fontSize: '1.2rem',
-                      padding: '15px 30px',
-                      '& .MuiAlert-icon': {
-                          fontSize: '2.5rem',
-                          color: 'white'
-                      },
-                      '& .MuiAlert-message': {
-                          textAlign: 'center',
-                          fontWeight: 'bold',
-                          color: 'white'
-                      }
-                  }}
-              >
-                  🎉 구독 신청 완료!
-                  <br />곧 실리콘밸리 소식을 받아보세요.
-              </Alert>
-          </Snackbar>
-          <ChatBot/>
-          <ComponentHelmet title="Daily Sale - 매일 세상의 모든 할인정보"/>
-      </Box>
-  );
+                                <form onSubmit={handleSubmit}>
+                                    <Box sx={{position: 'relative'}}>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            placeholder="이메일 주소를 입력하세요"
+                                            value={formData.email}
+                                            onChange={(e) => {
+                                                setFormData(prev => ({
+                                                    ...prev,
+                                                    email: e.target.value
+                                                }));
+                                                setError(''); // 입력 시 오류 메시지 초기화
+                                            }}
+                                            error={!!error}
+                                            sx={{
+                                                '& .MuiOutlinedInput-root': {
+                                                    height: '60px',
+                                                    fontSize: '1.1rem',
+                                                    '& fieldset': {
+                                                        borderColor: 'rgba(255, 205, 0, 0.5)',
+                                                    },
+                                                    '&:hover fieldset': {
+                                                        borderColor: '#FFCD00',
+                                                    },
+                                                    '&.Mui-focused fieldset': {
+                                                        borderColor: '#F29727',
+                                                    },
+                                                }
+                                            }}
+                                        />
+                                        {error && (
+                                            <Typography
+                                                color="error"
+                                                variant="body2"
+                                                sx={{
+                                                    position: 'absolute',
+                                                    mt: 1,
+                                                    ml: 2,
+                                                    fontSize: '0.875rem'
+                                                }}
+                                            >
+                                                {error}
+                                            </Typography>
+                                        )}
+                                    </Box>
+                                    <Box sx={{display: 'flex', gap: 2, mt: error ? 3 : 2}}>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            fullWidth
+                                            size="large"
+                                            endIcon={<NotificationsActive/>}
+                                            sx={{
+                                                background: 'linear-gradient(45deg, #F29727 30%, #FFCD00 90%)',
+                                                color: 'white',
+                                                height: '60px',
+                                                fontSize: '1.1rem',
+                                                '&:hover': {
+                                                    background: 'linear-gradient(45deg, #E18617 30%, #EFBD00 90%)',
+                                                    boxShadow: '0 4px 8px rgba(242, 151, 39, 0.3)'
+                                                }
+                                            }}
+                                        >
+                                            할인 정보 구독하기
+                                        </Button>
+                                    </Box>
+                                </form>
+                            </StyledPaper>
+                        </Grid>
+                    </Grid>
+                </motion.div>
+            </Container>
+
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={3000}
+                onClose={() => setOpenSnackbar(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                sx={{
+                    top: '30% !important',
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <Alert
+                    severity="success"
+                    sx={{
+                        width: 'auto',
+                        minWidth: '400px',
+                        background: 'linear-gradient(135deg, #FFCD00 0%, #F29727 100%)',
+                        color: 'white',
+                        borderRadius: '12px',
+                        boxShadow: '0 8px 20px rgba(242, 151, 39, 0.2)',
+                        fontSize: '1.2rem',
+                        padding: '15px 30px',
+                        '& .MuiAlert-icon': {
+                            fontSize: '2.5rem',
+                            color: 'white'
+                        },
+                        '& .MuiAlert-message': {
+                            textAlign: 'center',
+                            fontWeight: 'bold',
+                            color: 'white'
+                        }
+                    }}
+                >
+                    🎉 구독 신청 완료!
+                    <br />곧 할인 정보를 받아보실 수 있습니다.
+                </Alert>
+            </Snackbar>
+            <ChatBot/>
+            <ComponentHelmet title="Daily Sale - 매일 세상의 모든 할인정보"/>
+        </Box>
+    );
 }

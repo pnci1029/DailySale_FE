@@ -1,4 +1,5 @@
 import {AdminUser} from "@/types/adminUser";
+import {HeaderStatus} from "@/components/common/Header";
 
 export enum Status {
     IDLE = "idle",
@@ -45,5 +46,26 @@ type ChipStatus = {
 export type StatusMapping = {
     [key: string]: ChipStatus;
 };
+
+interface BaseMenuItem {
+    label: string;
+    icon: JSX.Element;
+    path: string;
+}
+
+interface SubMenuItem extends BaseMenuItem {}
+
+interface SubMenuGroup extends BaseMenuItem {
+    subItems: SubMenuItem[];
+}
+
+interface MenuItem extends BaseMenuItem {
+    status: HeaderStatus;
+    subItems?: SubMenuGroup[];
+}
+
+export enum SubMenu{
+
+}
 
 // ~admin

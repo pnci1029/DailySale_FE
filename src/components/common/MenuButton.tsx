@@ -1,5 +1,10 @@
 import style from "../../assets/scss/common/header.module.scss";
-import {HeaderStatus, SubMenu} from "./Header";
+import {HeaderStatus} from "./Header";
+
+// SubMenu enum 업데이트 (HeaderStatus에 맞춤)
+export enum SubMenu {
+    COMMUNITY = "커뮤니티",
+}
 
 interface ButtonData {
     label: string;
@@ -26,14 +31,12 @@ export function MenuButton(
         onMouseLeave,
         onClickChangePage,
     }
-        : Args) {
+    : Args) {
 
     const onClickChangSubPage = (menu: SubMenu) => {
         switch (menu) {
             case SubMenu.COMMUNITY:
                 return window.location.href = '/community';
-            case SubMenu.SHARE_YOUR_TIPS:
-                return window.location.href = '/tips';
             default:
                 return "/";
         }
@@ -50,11 +53,11 @@ export function MenuButton(
     );
 
     const SubMenus = ({menu, onMenuClick, onSubItemClick}:
-                          {
-                              menu: { title: SubMenu, subItems: string[] }[],
-                              onMenuClick: (_: any) => void,
-                              onSubItemClick: (_: any) => void
-                          }) => (
+                      {
+                          menu: { title: SubMenu, subItems: string[] }[],
+                          onMenuClick: (_: any) => void,
+                          onSubItemClick: (_: any) => void
+                      }) => (
         <div className={style.subMenu}>
             <ul>
                 {menu.map((menuItem, index) => (
@@ -62,7 +65,7 @@ export function MenuButton(
                         <span onClick={() => onMenuClick(menuItem.title)} className={style.subMenuTitle}>{menuItem.title}</span>
 
                         {/* 하위 항목이 있는 경우 SubItems 컴포넌트 렌더링 */}
-                        {menuItem.subItems && (
+                        {menuItem.subItems && menuItem.subItems.length > 0 && (
                             <SubItems items={menuItem.subItems} onClick={onSubItemClick}/>
                         )}
                     </li>
@@ -86,7 +89,7 @@ export function MenuButton(
                         {data.label}
                     </button>
 
-                    {data.subMenu.length > 0 && activeButton === idx && (
+                    {data.subMenu && data.subMenu.length > 0 && activeButton === idx && (
                         <SubMenus
                             menu={data.subMenu}
                             onMenuClick={(title: SubMenu) => onClickChangSubPage(title)}
