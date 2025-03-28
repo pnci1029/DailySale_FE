@@ -16,7 +16,6 @@ import {MyPage} from "./components/MyPage";
 import {HelmetProvider} from 'react-helmet-async';
 import {TermsAndConditions} from './components/legal/TermsAndConditions';
 import {PrivacyPolicy} from './components/legal/PrivacyPolicy';
-import {UserInfo} from "./features/auth/UserInfo";
 import {AdminDashboard} from "./features/admin/AdminDashboard";
 import {AdminLayout} from './features/admin/AdminLayout';
 import {AdminUserManagement} from "./features/admin/AdminUserManagement";
@@ -60,10 +59,6 @@ const router = createBrowserRouter([
       {
         path: "signin",
         element: <SignIn />
-      },
-      {
-        path: "user-info/:id",
-        element: <UserInfo />
       },
       {
         path: "success",
