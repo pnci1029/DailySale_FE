@@ -6,74 +6,75 @@ import {
     TextField,
     IconButton,
     Typography,
-    Fade,
     Slide
 } from '@mui/material';
-import { Send, Close } from '@mui/icons-material';
+import { Send, Close, ShoppingCart } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ChatBotIcon = styled(motion.div)`
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 70px;
-  height: 70px;
-  cursor: pointer;
-  z-index: 1000;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-  
-  &:hover {
-    transform: scale(1.05);
-  }
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    z-index: 1000;
+    filter: drop-shadow(0 4px 8px rgba(242, 151, 39, 0.3));
+
+    &:hover {
+        transform: scale(1.05);
+    }
 `;
 
 const ChatWindow = styled(Paper)`
-  position: fixed;
-  bottom: 100px;
-  right: 20px;
-  width: 360px;
-  height: 500px;
-  display: flex;
-  flex-direction: column;
-  z-index: 1000;
-  overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 360px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 205, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(242, 151, 39, 0.15);
+    background: rgba(255, 255, 255, 0.95);
 `;
 
 const ChatHeader = styled(Box)`
-  background: linear-gradient(45deg, #2196F3 30%, #21CBF3 90%);
-  color: white;
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    background: linear-gradient(45deg, #F29727 30%, #FFCD00 90%);
+    color: white;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 `;
 
 const ChatBody = styled(Box)`
-  flex: 1;
-  padding: 16px;
-  overflow-y: auto;
-  background: #f5f5f5;
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background: rgba(255, 252, 242, 0.7);
 `;
 
 const ChatInputArea = styled(Box)`
-  padding: 16px;
-  background: white;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 8px;
+    padding: 16px;
+    background: white;
+    border-top: 1px solid rgba(255, 205, 0, 0.3);
+    display: flex;
+    gap: 8px;
 `;
 
 const Message = styled(Box)<{ isUser?: boolean }>`
-  max-width: 80%;
-  margin: 8px 0;
-  padding: 12px 16px;
-  border-radius: 16px;
-  background: ${props => props.isUser ? '#2196F3' : 'white'};
-  color: ${props => props.isUser ? 'white' : 'inherit'};
-  align-self: ${props => props.isUser ? 'flex-end' : 'flex-start'};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 80%;
+    margin: 8px 0;
+    padding: 12px 16px;
+    border-radius: 16px;
+    background: ${props => props.isUser ? 'linear-gradient(45deg, #F29727 30%, #FFCD00 90%)' : 'white'};
+    color: ${props => props.isUser ? 'white' : '#333'};
+    align-self: ${props => props.isUser ? 'flex-end' : 'flex-start'};
+    box-shadow: 0 2px 8px rgba(242, 151, 39, ${props => props.isUser ? '0.2' : '0.1'});
 `;
 
 interface ChatMessage {
@@ -88,7 +89,7 @@ export function ChatBot() {
     const [messages, setMessages] = useState<ChatMessage[]>([
         {
             id: 1,
-            text: '안녕하세요! 해외 취업에 대해 어떤 것이든 물어보세요 😊',
+            text: '안녕하세요! Daily Sale 할인 도우미입니다. 할인 정보나 쇼핑 관련 질문이 있으신가요? 😊',
             isUser: false
         }
     ]);
@@ -168,14 +169,14 @@ export function ChatBot() {
                 whileTap={{ scale: 0.95 }}
             >
                 <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="60" cy="60" r="56" fill="#2196F3" />
-                    <circle cx="60" cy="60" r="52" fill="#1976D2" />
+                    <circle cx="60" cy="60" r="56" fill="#FFCD00" />
+                    <circle cx="60" cy="60" r="52" fill="#F29727" />
                     <rect x="35" y="40" width="50" height="45" rx="8" fill="white" />
-                    <path d="M60 25 L60 35" stroke="white" stroke-width="4" stroke-linecap="round" />
+                    <path d="M60 25 L60 35" stroke="white" strokeWidth="4" strokeLinecap="round" />
                     <circle cx="60" cy="22" r="4" fill="white" />
-                    <circle cx="45" cy="55" r="5" fill="#1976D2" />
-                    <circle cx="75" cy="55" r="5" fill="#1976D2" />
-                    <path d="M45 70 Q60 80 75 70" stroke="#1976D2" stroke-width="4" fill="none" stroke-linecap="round" />
+                    <circle cx="45" cy="55" r="5" fill="#F29727" />
+                    <circle cx="75" cy="55" r="5" fill="#F29727" />
+                    <path d="M45 70 Q60 80 75 70" stroke="#F29727" strokeWidth="4" fill="none" strokeLinecap="round" />
                     <circle cx="28" cy="60" r="4" fill="white" />
                     <circle cx="92" cy="60" r="4" fill="white" />
                 </svg>
@@ -187,7 +188,8 @@ export function ChatBot() {
                         <ChatWindow>
                             <ChatHeader>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                    <Typography variant="h6">Koreer Assistant</Typography>
+                                    <ShoppingCart sx={{ fontSize: 24 }} />
+                                    <Typography variant="h6" fontWeight={600}>할인 도우미</Typography>
                                 </Box>
                                 <IconButton
                                     size="small"
@@ -216,18 +218,37 @@ export function ChatBot() {
                                 <TextField
                                     fullWidth
                                     variant="outlined"
-                                    placeholder="메시지를 입력하세요..."
+                                    placeholder="특가 정보가 궁금하신가요?"
                                     size="small"
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
                                     onKeyPress={handleKeyPress}
                                     multiline
                                     maxRows={4}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'rgba(255, 205, 0, 0.5)',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: '#FFCD00',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#F29727',
+                                            },
+                                        }
+                                    }}
                                 />
                                 <IconButton
-                                    color="primary"
                                     onClick={handleSend}
                                     disabled={!message.trim()}
+                                    sx={{
+                                        backgroundColor: message.trim() ? 'rgba(255, 205, 0, 0.1)' : 'transparent',
+                                        color: '#F29727',
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(255, 205, 0, 0.2)',
+                                        }
+                                    }}
                                 >
                                     <Send />
                                 </IconButton>
