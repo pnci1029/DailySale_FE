@@ -10,19 +10,31 @@ export function SignIn() {
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleGoogleLogin = useCallback(() => {
-        setIsLoading(true);
-        setErrorMessage('');
-
+    async function handleGoogleLogin() {
         try {
-            const redirectUri = `${process.env.REACT_APP_BASE_URL}/auth/google/callback`;
-            const googleClientId = '969073700844-r0dbph7gk0e9aqm5868ums9jgddqgvg2.apps.googleusercontent.com';
-            window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${redirectUri}&response_type=code&scope=email profile`;
-        } catch (error: any) {
-            setErrorMessage(error.message || '로그인에 실패했습니다');
-            setIsLoading(false);
+            window.location.href = `${process.env.REACT_APP_BASE_URL}/auth/google`;
+        } catch (error) {
+            console.error('구글 인증 URL을 가져오는데 실패했습니다:', error);
         }
-    }, []);
+    }
+
+    // const handleGoogleLogin = useCallback(() => {
+    //     setIsLoading(true);
+    //     setErrorMessage('');
+    //     console.log('start')
+    //
+    //     try {
+    //         const redirectUri = `${process.env.REACT_APP_BASE_URL}/auth/google`;
+    //         const requestUri = `${process.env.REACT_APP_BASE_URL}/auth/google`;
+    //         const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    //         console.log(redirectUri)
+    //         console.log(googleClientId)
+    //         window.location.href = requestUri;
+    //     } catch (error: any) {
+    //         setErrorMessage(error.message || '로그인에 실패했습니다');
+    //         setIsLoading(false);
+    //     }
+    // }, []);
 
     return (
         <Box
