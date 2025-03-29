@@ -1,10 +1,12 @@
 export interface UserDTO {
     id: number,
-    user_email: string,
-    username: string,
-    nation: string,
-    is_active: string,
-    is_email_verified: string,
-    role: string,
+    userEmail: string,
+    userName: string,
+    role: UserRole,
 
+}
+
+export enum UserRole{
+    USER = "USER",
+    ADMIN = "ADMIN"
 }

@@ -216,19 +216,19 @@ export function MyPage() {
                                     <Avatar
                                         sx={{ width: 100, height: 100, border: '3px solid white' }}
                                     >
-                                        {user?.username}
+                                        {user?.userName}
                                     </Avatar>
                                 </motion.div>
                             </Grid>
                             <Grid item xs={12} sm>
                                 <Typography variant="h4" gutterBottom>
-                                    {user?.username}
+                                    {user?.userName}
                                 </Typography>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm="auto">
                                         <Box display="flex" alignItems="center">
                                             <Email sx={{ mr: 1 }} />
-                                            {user?.user_email}
+                                            {user?.userEmail}
                                         </Box>
                                     </Grid>
                                     <Grid item xs={12} sm="auto">

@@ -21,8 +21,8 @@ const ProtectedRoute = ({ children }) => {
 
     const getCurrentUserInfo = useCallback(async () => {
         try {
-            const result: JsonResponseDTO<UserDTO> = await dispatch(getCurrentUserAsync()).unwrap();
-            setIsAdmin(result.data.role === 'admin' ? AuthType.ADMIN : AuthType.NOT_ADMIN);
+            const result: UserDTO = await dispatch(getCurrentUserAsync()).unwrap();
+            setIsAdmin(result.role === 'ADMIN' ? AuthType.ADMIN : AuthType.NOT_ADMIN);
         } catch (err: any) {
             console.log(err.message || 'Failed to sign up');
             setIsAdmin(AuthType.NOT_LOGIN);

@@ -3,8 +3,8 @@ import {useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "@/store/store";
 import {getCurrentUserAsync} from "../../slice/AuthSlice";
-import {JsonResponseDTO} from "@/types/common";
 import {UserDTO} from "@/types/auth";
+import {MainApi} from "../../api/MainApi";
 
 export function Success() {
     const location = useLocation(); // 현재 URL 정보를 가져옴
@@ -21,19 +21,16 @@ export function Success() {
 
             if (accessToken) {
                 document.cookie = `accessToken=${accessToken}; path=/; max-age=${60 * 60};`;
+                MainApi.getInstance().setToken(accessToken);
             }
             if (refreshToken) {
                 document.cookie = `refreshToken=${refreshToken}; path=/; max-age=${60 * 60 * 24 * 7};`;
             }
 
             // 유저 정보 확인
-            const result:JsonResponseDTO<UserDTO> = await dispatch(getCurrentUserAsync()).unwrap();
+            const result:UserDTO = await dispatch(getCurrentUserAsync()).unwrap();
             console.log('success result : ', result)
-            if (result.data.role === "user") {
-                navigate(`/user-info/${result.data.id}`, { replace: true });
-            } else {
                 navigate('/', { replace: true });
-            }
         };
 
         setup();
