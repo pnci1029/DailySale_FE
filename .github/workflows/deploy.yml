@@ -62,8 +62,6 @@ jobs:
             docker rm dailysale-frontend-container || true &&
             docker run -d --name dailysale-frontend-container \
               -p 80:80 \
-              --restart unless-stopped \
-              --link dailysale-backend-container:backend \
               dailysale-frontend:latest
           "
 
