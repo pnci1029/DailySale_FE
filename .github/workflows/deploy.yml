@@ -56,7 +56,15 @@ jobs:
             cd /dailysale &&
             rm -rf dailysale_fe || true &&
             mkdir -p dailysale_fe &&
-            unzip -o dailysale_fe.zip -d dailysale_fe
+            unzip -o dailysale_fe.zip -d dailysale_fe &&
+            docker build -t dailysale-frontend:latest -f Dockerfile.frontend . && 
+            docker stop dailysale-frontend-container || true &&
+            docker rm dailysale-frontend-container || true &&
+            docker run -d --name dailysale-frontend-container \
+              -p 80:80 \
+              --restart unless-stopped \
+              --link dailysale-backend-container:backend \
+              dailysale-frontend:latest
           "
 
       # 배포 완료 알림
