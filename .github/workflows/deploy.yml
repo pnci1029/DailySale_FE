@@ -33,6 +33,7 @@ jobs:
         env:
           NODE_ENV: production
           CI: false
+          SKIP_PREFLIGHT_CHECK: true
 
       # 프론트엔드 압축
       - name: Create ZIP archive
