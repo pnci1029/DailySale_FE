@@ -28,8 +28,10 @@ jobs:
       # 프론트엔드 의존성 설치 및 빌드
       - name: Install and Build Frontend
         run: |
-          yarn install --frozen-lockfile
+          yarn install
+          pwd
           yarn build
+
         env:
           NODE_ENV: production
           CI: false
