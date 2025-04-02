@@ -3,7 +3,7 @@ name: Deploy Frontend
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   deploy:
@@ -25,22 +25,10 @@ jobs:
         run: |
           echo "${{ secrets.ENV_PRODUCTION }}" > .env.production
 
-      # 프론트엔드 의존성 설치 및 빌드
-      - name: Install and Build Frontend
+      # 소스 코드 압축
+      - name: Create ZIP archive of source code
         run: |
-          yarn install
-          pwd
-          yarn build
-
-        env:
-          NODE_ENV: production
-          CI: false
-          SKIP_PREFLIGHT_CHECK: true
-
-      # 프론트엔드 압축
-      - name: Create ZIP archive
-        run: |
-          zip -r dailysale_fe.zip build
+          zip -r dailysale_fe.zip . -x "node_modules/*" -x ".git/*"
           ls -la dailysale_fe.zip
 
       # SSH 접근 설정
@@ -57,14 +45,24 @@ jobs:
         run: |
           scp -i ~/.ssh/id_rsa dailysale_fe.zip ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/dailysale/
 
-      # 배포 스크립트 실행
-      - name: Deploy on remote server
+      # 서버에서 빌드 및 배포 실행
+      - name: Build and Deploy on remote server
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} "
             cd /dailysale &&
             rm -rf dailysale_fe || true &&
             mkdir -p dailysale_fe &&
             unzip -o dailysale_fe.zip -d dailysale_fe &&
+            cd dailysale_fe &&
+            yarn install &&
+            export NODE_OPTIONS=--max_old_space_size=8192 &&
+            export CI=false &&
+            export SKIP_PREFLIGHT_CHECK=true &&
+            export NODE_ENV=production &&
+            yarn build &&
+            cd .. &&
+            mkdir -p dailysale_fe &&
+            cp -r dailysale_fe/build/* dailysale_fe/ &&
             docker build -t dailysale-frontend:latest -f Dockerfile.frontend . && 
             docker stop dailysale-frontend-container || true &&
             docker rm dailysale-frontend-container || true &&
