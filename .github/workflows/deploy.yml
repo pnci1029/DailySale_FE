@@ -69,9 +69,11 @@ jobs:
             docker build -t dailysale-frontend:latest -f Dockerfile.frontend . && 
             docker stop dailysale-frontend-container || true &&
             docker rm dailysale-frontend-container || true &&
-            docker run -d --name dailysale-frontend-container \
-              -p 80:80 \
-              dailysale-frontend:latest
+            docker restart dailysale-frontend-container
+#            docker run -d --name dailysale-frontend-container \
+#              -p 80:80 \
+#              --network host \
+#              dailysale-frontend:latest
           "
 
       # 배포 완료 알림

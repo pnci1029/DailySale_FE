@@ -134,6 +134,7 @@ export default function Main() {
             console.error('구독 오류:', error);
         }
     };
+    console.log(444)
 
     const features = [
         {
