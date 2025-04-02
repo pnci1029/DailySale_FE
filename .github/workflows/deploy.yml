@@ -3,7 +3,7 @@ name: Deploy Frontend
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   deploy:
@@ -29,6 +29,7 @@ jobs:
       - name: Install and Build Frontend
         run: |
           yarn install
+          yarn add --dev @types/lodash @types/node
           pwd
           yarn build
 
@@ -68,10 +69,12 @@ jobs:
             docker build -t dailysale-frontend:latest -f Dockerfile.frontend . && 
             docker stop dailysale-frontend-container || true &&
             docker rm dailysale-frontend-container || true &&
-            docker run -d --name dailysale-frontend-container \
-              -p 80:80 \
-              dailysale-frontend:latest
+            docker-compose up -d
           "
+      #            docker run -d --name dailysale-frontend-container \
+      #              -p 80:80 \
+      #              --network host \
+      #              dailysale-frontend:latest
 
       # 배포 완료 알림
       - name: Deployment notification
