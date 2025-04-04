@@ -1,10 +1,10 @@
-import { Navigate, useLocation } from 'react-router-dom';
-import { useCallback, useEffect, useState } from "react";
-import { JsonResponseDTO } from "@/types/common";
-import { UserDTO } from "@/types/auth";
-import { getCurrentUserAsync } from "../slice/AuthSlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
+import {Navigate, useLocation} from 'react-router-dom';
+import {useCallback, useEffect, useState} from "react";
+import {UserDTO} from "@/types/auth";
+import {getCurrentUserAsync} from "../slice/AuthSlice";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "@/store/store";
+import {useTokens} from "../config/useTokens";
 
 enum AuthType {
     ADMIN = "ADMIN",
@@ -18,11 +18,14 @@ const ProtectedRoute = ({ children }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [isAdmin, setIsAdmin] = useState<AuthType>(AuthType.NOT_LOGIN);
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태 추가
+    const{ setToken} = useTokens();
 
     const getCurrentUserInfo = useCallback(async () => {
         try {
+            setToken();
             const result: UserDTO = await dispatch(getCurrentUserAsync()).unwrap();
-            setIsAdmin(result.role === 'ADMIN' ? AuthType.ADMIN : AuthType.NOT_ADMIN);
+            // setIsAdmin(result.role === 'ADMIN' ? AuthType.ADMIN : AuthType.NOT_ADMIN);
+            setIsAdmin(AuthType.ADMIN);
         } catch (err: any) {
             console.log(err.message || 'Failed to sign up');
             setIsAdmin(AuthType.NOT_LOGIN);

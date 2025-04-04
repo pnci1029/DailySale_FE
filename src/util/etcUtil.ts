@@ -31,17 +31,3 @@ export const timeAgo = (timestamp:string)  =>{
         return `${days}일 전`;
     }
 }
-
-export const convertTipCategory = (tip: string) => {
-    switch (tip) {
-        case 'info':
-            return '해외 취업 정보';
-        case 'daily':
-            return '생활';
-        case 'news':
-            return '개발 기술, 최신 뉴스';
-        default:
-            return "전체"
-    }
-
-};
