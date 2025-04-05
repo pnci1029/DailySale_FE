@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import {
     Box,
@@ -94,59 +94,65 @@ export function ChatBot() {
         }
     ]);
 
+    // 채팅 영역에 대한 ref 생성
+    const chatBodyRef = useRef<HTMLDivElement>(null);
+
+    // 메시지 목록이 변경될 때마다 스크롤을 맨 아래로 이동
+    useEffect(() => {
+        if (chatBodyRef.current) {
+            chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+        }
+    }, [messages]);
+
     const handleSend = async () => {
         if (!message.trim()) return;
 
         // 사용자 메시지 추가
-        const newMessage: ChatMessage = {
+        const userMessage: ChatMessage = {
             id: messages.length + 1,
             text: message,
             isUser: true
         };
 
-        setMessages(prev => [...prev, newMessage]);
+        setMessages(prev => [...prev, userMessage]);
+        const currentMessage = message;
         setMessage('');
 
         try {
-            // 로딩 메시지 추가 (선택사항)
+            // 로딩 메시지 추가
             setMessages(prev => [...prev, {
-                id: prev.length + 2,
+                id: prev.length + 1,
                 text: "답변을 생성하고 있습니다...",
                 isUser: false
             }]);
 
             const response = await fetch(
-                `${process.env.REACT_APP_BASE_URL}/chatbot/post/${encodeURIComponent(message)}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                }
+                `${process.env.REACT_APP_BASE_URL}/chatbot?query=${encodeURIComponent(currentMessage)}`
             );
 
             if (!response.ok) {
                 throw new Error('API request failed');
             }
 
-            const data = await response.json();
+            // 텍스트로 응답을 받습니다
+            const text = await response.text();
 
             // 로딩 메시지 제거하고 실제 응답 추가
             setMessages(prev => {
                 const filteredMessages = prev.filter(msg => msg.text !== "답변을 생성하고 있습니다...");
                 return [...filteredMessages, {
-                    id: prev.length + 2,
-                    text: data.answer,
+                    id: prev.length + 1,
+                    text: text,
                     isUser: false
                 }];
             });
-
         } catch (error) {
             console.error('Error fetching response:', error);
             // 에러 메시지 표시
             setMessages(prev => {
                 const filteredMessages = prev.filter(msg => msg.text !== "답변을 생성하고 있습니다...");
                 return [...filteredMessages, {
-                    id: prev.length + 2,
+                    id: prev.length + 1,
                     text: "죄송합니다. 잠시 후 다시 시도해주세요.",
                     isUser: false
                 }];
@@ -200,7 +206,7 @@ export function ChatBot() {
                                 </IconButton>
                             </ChatHeader>
 
-                            <ChatBody>
+                            <ChatBody ref={chatBodyRef}>
                                 <Box sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
