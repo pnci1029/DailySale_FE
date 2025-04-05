@@ -13,12 +13,10 @@ import {
     Typography,
     Chip,
     InputAdornment,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
     Stack,
-    IconButton, Tabs, Tab,
+    IconButton,
+    Tabs,
+    Tab,
 } from '@mui/material';
 import { Search, Add, Edit, Delete } from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
@@ -28,17 +26,21 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ko } from 'date-fns/locale';
+import {convertTimeToFormat} from "../../util/etcUtil";
 
 interface Newsletter {
     id: number;
     title: string;
     content: string;
-    category: 'NEWSLETTER';
-    send_date: string | null;
-    created_by: number | null;
-    created_at: string | null;
-    updated_at: string | null;
-    deleted_at: string | null;
+    isSent: string;
+    sentAt: string | null;
+    createdAt: string | null;
+}
+
+interface NewsLetterDTO {
+    title: string;
+    content: string;
+    sentAt: string | null;
 }
 
 export function AdminNewsletterManagement() {
@@ -55,40 +57,19 @@ export function AdminNewsletterManagement() {
     const [loading, setLoading] = useState<boolean>(false);
     const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
     const [totalNewsletters, setTotalNewsletters] = useState<number>(0);
+    const [totalPages, setTotalPages] = useState<number>(0);
     const [searchWord, setSearchWord] = useState<string>('');
     const [paginationModel, setPaginationModel] = useState({
         page: 0,
-        pageSize: 10,
+        pageSize: 15,
     });
 
     // 새 뉴스레터 또는 편집용 폼 상태
-    const [formData, setFormData] = useState<Omit<Newsletter, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>>({
+    const [formData, setFormData] = useState<NewsLetterDTO>({
         title: '',
         content: '',
-        category: 'NEWSLETTER',
-        send_date: null,
-        created_by: null,
+        sentAt: null,
     });
-
-    const categoryOptions = [
-        { value: 'NEWSLETTER', label: '뉴스레터' }
-    ];
-
-    const getCategoryColor = (category: string) => {
-        switch (category) {
-            case 'PROMOTION':
-                return 'primary';
-            case 'UPDATE':
-                return 'secondary';
-            case 'EVENT':
-                return 'error';
-            case 'NEWSLETTER':
-                return 'success';
-            case 'GENERAL':
-            default:
-                return 'default';
-        }
-    };
 
     // 안전한 날짜 포맷팅 함수
     const formatDate = (dateStr: string | null | undefined) => {
@@ -114,37 +95,31 @@ export function AdminNewsletterManagement() {
     const columns: GridColDef[] = [
         { field: 'title', headerName: '제목', width: 200 },
         {
-            field: 'category',
-            headerName: '카테고리',
+            field: 'isSent',
+            headerName: '발송 상태',
             width: 120,
             renderCell: (params) => (
                 <Chip
-                    label={params.value || 'GENERAL'}
-                    color={getCategoryColor(params.value || 'GENERAL')}
+                    label={params.value === 'Y' ? '발송됨' : '대기중'}
+                    color={params.value === 'Y' ? 'success' : 'warning'}
                     size="small"
                 />
             )
         },
         {
-            field: 'send_date',
-            headerName: '발송 예정일',
+            field: 'sentAt',
+            headerName: '발송일',
             width: 130,
             renderCell: (params) => {
-                const send_date = params.row.send_date;
-                return <span>{send_date ? formatShortDate(send_date) : '미정'}</span>;
+                const sentAt = params.row.sentAt;
+                return <span>{params.row.isSent === 'Y' ? formatShortDate(sentAt) : '미발송'}</span>;
             }
         },
         {
-            field: 'created_at',
+            field: 'createdAt',
             headerName: '작성일',
             width: 180,
-            renderCell: (params) => <span>{formatDate(params.row.created_at)}</span>
-        },
-        {
-            field: 'updated_at',
-            headerName: '수정일',
-            width: 180,
-            renderCell: (params) => <span>{formatDate(params.row.updated_at)}</span>
+            renderCell: (params) => <span>{formatDate(params.row.createdAt)}</span>
         },
         {
             field: 'actions',
@@ -187,9 +162,9 @@ export function AdminNewsletterManagement() {
             const accessToken = getCookie('accessToken');
 
             // URL 생성 및 파라미터 추가
-            const url = new URL(`${process.env.REACT_APP_BASE_URL}/admin/newsletter`);
-            url.searchParams.append('page', String(page + 1));
-            url.searchParams.append('limit', String(limit));
+            const url = new URL(`${process.env.REACT_APP_BASE_URL}/news`);
+            url.searchParams.append('page', String(page));
+            url.searchParams.append('size', String(limit));
 
             // 검색어가 있는 경우에만 추가
             if (search && search.trim() !== '') {
@@ -212,8 +187,9 @@ export function AdminNewsletterManagement() {
             }
 
             const responseData = await response.json();
-            setNewsletters(responseData.data);
-            setTotalNewsletters(responseData.meta.total);
+            setNewsletters(responseData.content || []);
+            setTotalNewsletters(responseData.totalElement || 0);
+            setTotalPages(responseData.totalPages || 0);
         } catch (error) {
             console.error('Error fetching newsletters:', error);
         } finally {
@@ -238,25 +214,26 @@ export function AdminNewsletterManagement() {
         try {
             const accessToken = getCookie('accessToken');
 
-            // 선택된 각 뉴스레터에 대해 순차적으로 삭제 요청
-            for (const newsletterId of selectedNewsletterIds) {
-                const response = await fetch(
-                    `${process.env.REACT_APP_BASE_URL}/admin/newsletter/${newsletterId}`,
-                    {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                            'Content-Type': 'application/json'
-                        }
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error(`Failed to delete newsletter ${newsletterId}`);
+            // 모든 선택된 ID를 한 번에 전송
+            const response = await fetch(
+                `${process.env.REACT_APP_BASE_URL}/news`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        idxList: selectedNewsletterIds
+                    })
                 }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to delete newsletters');
             }
 
-            // 모든 삭제가 완료된 후 목록 새로고침
+            // 삭제가 완료된 후 목록 새로고침
             await fetchNewsletters(paginationModel.page, paginationModel.pageSize, searchWord);
             setSelectedNewsletterIds([]);
             setDeleteDialogOpen(false);
@@ -283,9 +260,7 @@ export function AdminNewsletterManagement() {
         setFormData({
             title: newsletter.title,
             content: newsletter.content,
-            category: 'NEWSLETTER',
-            send_date: newsletter.send_date,
-            created_by: newsletter.created_by
+            sentAt: newsletter.sentAt
         });
         setIsEditing(true);
         setOpenFormDialog(true);
@@ -301,9 +276,7 @@ export function AdminNewsletterManagement() {
         setFormData({
             title: '',
             content: '',
-            category: 'NEWSLETTER',
-            send_date: null,
-            created_by: null
+            sentAt: null
         });
         setIsEditing(false);
     };
@@ -313,9 +286,7 @@ export function AdminNewsletterManagement() {
         setFormData({
             title: '',
             content: '',
-            category: 'NEWSLETTER',
-            send_date: null,
-            created_by: null
+            sentAt: null
         });
         setOpenFormDialog(true);
     };
@@ -328,17 +299,10 @@ export function AdminNewsletterManagement() {
         });
     };
 
-    const handleCategoryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setFormData({
-            ...formData,
-            category: 'NEWSLETTER'
-        });
-    };
-
     const handleDateChange = (newDate: Date | null) => {
         setFormData({
             ...formData,
-            send_date: newDate ? newDate.toISOString().split('T')[0] : null
+            sentAt: newDate ? newDate.toISOString() : null
         });
     };
 
@@ -346,23 +310,42 @@ export function AdminNewsletterManagement() {
         try {
             const accessToken = getCookie('accessToken');
 
-            const url = isEditing
-                ? `${process.env.REACT_APP_BASE_URL}/admin/newsletter/${selectedNewsletter?.id}`
-                : `${process.env.REACT_APP_BASE_URL}/admin/newsletter`;
+            if (isEditing && selectedNewsletter) {
+                // PUT 요청 - 업데이트
+                const response = await fetch(`${process.env.REACT_APP_BASE_URL}/news/${selectedNewsletter.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: formData.title,
+                        content: formData.content,
+                        sentAt: convertTimeToFormat(formData.sentAt)
+                    })
+                });
 
-            const method = isEditing ? 'PUT' : 'POST';
+                if (!response.ok) {
+                    throw new Error('Failed to update newsletter');
+                }
+            } else {
+                // POST 요청 - 생성
+                const response = await fetch(`${process.env.REACT_APP_BASE_URL}/news`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: formData.title,
+                        content: formData.content,
+                        sentAt: convertTimeToFormat(formData.sentAt)
+                    })
+                });
 
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to ${isEditing ? 'update' : 'create'} newsletter`);
+                if (!response.ok) {
+                    throw new Error('Failed to create newsletter');
+                }
             }
 
             handleCloseFormDialog();
@@ -474,11 +457,11 @@ export function AdminNewsletterManagement() {
                             <Box sx={{ p: 2 }}>
                                 <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
                                     <Chip
-                                        label={selectedNewsletter.category || 'GENERAL'}
-                                        color={getCategoryColor(selectedNewsletter.category || 'GENERAL')}
+                                        label={selectedNewsletter.isSent === 'Y' ? '발송됨' : '대기중'}
+                                        color={selectedNewsletter.isSent === 'Y' ? 'success' : 'warning'}
                                     />
                                     <Typography variant="body2" color="text.secondary">
-                                        발송 예정일: {selectedNewsletter.send_date ? formatShortDate(selectedNewsletter.send_date) : '미정'}
+                                        발송일: {selectedNewsletter.isSent === 'Y' ? formatShortDate(selectedNewsletter.sentAt) : '미발송'}
                                     </Typography>
                                 </Box>
 
@@ -486,7 +469,6 @@ export function AdminNewsletterManagement() {
                                     {selectedNewsletter.title}
                                 </Typography>
 
-                                {/* 탭 관련 상태 및 핸들러 추가 필요 */}
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
                                     <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)} aria-label="content view tabs">
                                         <Tab label="텍스트 보기" id="tab-0" />
@@ -528,10 +510,7 @@ export function AdminNewsletterManagement() {
 
                                 <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
                                     <Typography variant="body2" color="text.secondary">
-                                        작성일: {selectedNewsletter.created_at ? formatDate(selectedNewsletter.created_at) : '-'}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        마지막 수정일: {selectedNewsletter.updated_at ? formatDate(selectedNewsletter.updated_at) : '-'}
+                                        작성일: {selectedNewsletter.createdAt ? formatDate(selectedNewsletter.createdAt) : '-'}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -572,31 +551,14 @@ export function AdminNewsletterManagement() {
                                 required
                             />
 
-                            <Box sx={{ display: 'flex', gap: 2, my: 2 }}>
-                                <FormControl fullWidth margin="normal">
-                                    <InputLabel>카테고리</InputLabel>
-                                    <Select
-                                        value={formData.category}
-                                        label="카테고리"
-                                        onChange={handleCategoryChange as any}
-                                    >
-                                        {categoryOptions.map(option => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-                                <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ko}>
-                                    <DatePicker
-                                        label="발송 예정일"
-                                        value={formData.send_date ? new Date(formData.send_date) : null}
-                                        onChange={handleDateChange}
-                                        sx={{ mt: 2, width: '100%' }}
-                                    />
-                                </LocalizationProvider>
-                            </Box>
+                            <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ko}>
+                                <DatePicker
+                                    label="발송 예정일"
+                                    value={formData.sentAt ? new Date(formData.sentAt) : null}
+                                    onChange={handleDateChange}
+                                    sx={{ mt: 2, width: '100%' }}
+                                />
+                            </LocalizationProvider>
 
                             <TextField
                                 name="content"
