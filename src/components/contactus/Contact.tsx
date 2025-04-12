@@ -96,7 +96,7 @@ export const Contact: React.FC = () => {
     {
       icon: <Email />,
       title: '이메일',
-      content: 'dailysalecontact@gmail.com',
+      content: 'contactsalehero@gmail.com',
       description: '24시간 이내 답변 드리겠습니다',
     },
     {

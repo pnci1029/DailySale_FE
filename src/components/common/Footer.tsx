@@ -187,7 +187,7 @@ export const Footer: React.FC = () => {
                                 lineHeight: 1.8
                             }}
                         >
-                            Email: dailysalecontact@gmail.com<br />
+                            Email: contactsalehero@gmail.com<br />
                             Phone: +82 02-987-6543<br />
                             Address: 서울특별시 강남구 삼성로
                         </Typography>

@@ -217,7 +217,7 @@ export const PrivacyPolicy: React.FC = () => {
                   ▶ 개인정보 보호책임자<br />
                   - 성명: [성명]<br />
                   - 직책: [직책]<br />
-                  - 연락처: [전화번호], dailysalecontact@gmail.com
+                  - 연락처: [전화번호], contactsalehero@gmail.com
                 </Typography>
               </Box>
 
