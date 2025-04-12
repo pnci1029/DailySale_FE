@@ -73,7 +73,7 @@ export function SignIn() {
                             <Box
                                 component="img"
                                 src={dailySaleLogo}
-                                alt="Daily Sale Logo"
+                                alt="Sale Hero Logo"
                                 sx={{
                                     height: 50,
                                     width: 50,
@@ -90,7 +90,7 @@ export function SignIn() {
                                     WebkitTextFillColor: 'transparent',
                                 }}
                             >
-                                Daily Sale
+                                Sale Hero
                             </Typography>
                         </Box>
 
@@ -128,7 +128,7 @@ export function SignIn() {
                             <Stack spacing={3}>
                                 <Box sx={{ textAlign: 'center', mb: 2 }}>
                                     <Typography variant="body1" color="text.secondary">
-                                        Daily Sale의 할인 정보를 받아보시려면 로그인해주세요
+                                        Sale Hero의 할인 정보를 받아보시려면 로그인해주세요
                                     </Typography>
                                 </Box>
 
@@ -165,7 +165,7 @@ export function SignIn() {
 
                         <Box sx={{ mt: 4, textAlign: 'center' }}>
                             <Typography variant="body2" color="text.secondary">
-                                © {new Date().getFullYear()} Daily Sale. All rights reserved.
+                                © {new Date().getFullYear()} Sale Hero. All rights reserved.
                             </Typography>
                         </Box>
                     </Box>

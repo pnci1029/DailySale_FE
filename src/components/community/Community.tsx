@@ -201,7 +201,7 @@ export function Community() {
                         )}
                     </Box>
                 </motion.div>
-                <ComponentHelmet title="Daily Sale - 커뮤니티" />
+                <ComponentHelmet title="Sale Hero - 커뮤니티" />
             </Container>
         </>
     );

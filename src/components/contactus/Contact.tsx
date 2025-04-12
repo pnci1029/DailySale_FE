@@ -147,7 +147,7 @@ export const Contact: React.FC = () => {
                   mb: 4,
                 }}
             >
-              할인 정보에 관한 모든 궁금증, Daily Sale이 해결해드립니다
+              할인 정보에 관한 모든 궁금증, Sale Hero가 해결해드립니다
             </Typography>
           </motion.div>
 
@@ -492,7 +492,7 @@ export const Contact: React.FC = () => {
             </Alert>
           </Snackbar>
 
-          <ComponentHelmet title={"Daily Sale - 문의하기"} />
+          <ComponentHelmet title={"Sale Hero - 문의하기"} />
         </Container>
       </Box>
   );

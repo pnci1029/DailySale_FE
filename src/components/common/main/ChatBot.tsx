@@ -89,7 +89,7 @@ export function ChatBot() {
     const [messages, setMessages] = useState<ChatMessage[]>([
         {
             id: 1,
-            text: '안녕하세요! Daily Sale 할인 도우미입니다. 할인 정보나 쇼핑 관련 질문이 있으신가요? 😊',
+            text: '안녕하세요! Sale Hero 할인 도우미입니다. 할인 정보나 쇼핑 관련 질문이 있으신가요? 😊',
             isUser: false
         }
     ]);

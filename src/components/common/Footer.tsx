@@ -29,7 +29,7 @@ export const Footer: React.FC = () => {
                                 mb: 2
                             }}
                         >
-                            About Daily Sale
+                            About Sale Hero
                         </Typography>
                         <Typography
                             variant="body2"
@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
                                 lineHeight: 1.6
                             }}
                         >
-                            매일 엄선된 할인 정보를 제공하는 Daily Sale이 여러분의 현명한 소비를 돕습니다.
+                            매일 엄선된 할인 정보를 제공하는 Sale Hero가 여러분의 현명한 소비를 돕습니다.
                             특가 세일부터 숨겨진 할인 코드까지, 모든 쇼핑 정보를 한 곳에서 확인하세요.
                         </Typography>
                     </Grid>
@@ -276,7 +276,7 @@ export const Footer: React.FC = () => {
                             }
                         }}
                     >
-                        © {new Date().getFullYear()} Daily Sale. All rights reserved.
+                        © {new Date().getFullYear()} Sale Hero. All rights reserved.
                     </Typography>
                 </Box>
             </Container>

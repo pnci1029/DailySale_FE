@@ -24,7 +24,7 @@ import {
   Menu as MenuIcon,
   Person,
 } from '@mui/icons-material';
-import logo from '../../assets/img/daily_sale_logo.png';
+import logo from '../../assets/img/sale_hero_ico.png';
 
 export enum HeaderStatus {
   COMMUNITY = "COMMUNITY",
@@ -154,7 +154,7 @@ export function Header() {
               <Box
                   component="img"
                   src={logo}
-                  alt="Daily Sale Logo"
+                  alt="Sale Hero Logo"
                   sx={{
                     height: 40,
                     width: 40,
@@ -188,7 +188,7 @@ export function Header() {
                   }}
                   onClick={() => handleNavigation('/', HeaderStatus.NONE)}
               >
-                Daily Sale
+                  Sale Hero
               </Typography>
 
               <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1 }}>

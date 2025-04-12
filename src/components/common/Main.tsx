@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Alert, Box, Button, Container, Grid, Paper, Snackbar, TextField, Typography,} from '@mui/material';
 import {motion} from 'framer-motion';
 import {styled} from '@mui/material/styles';
-import dailySaleLogo from '../../assets/img/daily_sale_logo.png';
+import saleHeroIco from '../../assets/img/sale_hero.png';
 import {CloudBackground} from './CloudBackground';
 import {ParticleBackground} from './ParticleBackground';
 import {Discount, LocalOffer, NotificationsActive, PriceCheck, ShoppingCart} from '@mui/icons-material';
@@ -256,8 +256,7 @@ export default function Main() {
                     transition={{ duration: 0.5 }}
                 >
                     <Box textAlign="center" mb={12}>
-                        <Logo src={dailySaleLogo} alt="Daily Sale Logo" />
-                        // 메인 타이틀 및 설명 문구 수정
+                        <Logo src={saleHeroIco} alt="Sale Hero Logo" />
                         <Typography
                             variant="h2"
                             gutterBottom
@@ -462,7 +461,7 @@ export default function Main() {
                 </Alert>
             </Snackbar>
             <ChatBot/>
-            <ComponentHelmet title="Daily Sale - 매일 세상의 모든 할인정보"/>
+            <ComponentHelmet title="Sale Hero - 매일 세상의 모든 할인정보"/>
         </Box>
     );
 }
