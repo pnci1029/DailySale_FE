@@ -570,7 +570,7 @@ export function MyPage() {
                     </Paper>
                 </motion.div>
             )}
-            <ComponentHelmet title={"Daily Sale - 마이페이지"} />
+            <ComponentHelmet title={"Sale Hero - 마이페이지"} />
         </Container>
     );
 }

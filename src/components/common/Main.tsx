@@ -139,27 +139,27 @@ export default function Main() {
         {
             icon: <Discount sx={{ fontSize: 40, color: '#F29727' }}/>,
             title: "오늘의 특가 세일",
-            description: "매일 업데이트되는 다양한 카테고리의 최저가 특가 정보"
+            description: "매일 엄선된 다양한 카테고리의 최저가 특가 정보"
         },
         {
             icon: <ShoppingCart sx={{ fontSize: 40, color: '#F29727' }}/>,
-            title: "쇼핑몰 쿠폰 정보",
-            description: "주요 쇼핑몰의 할인 쿠폰 및 프로모션 코드 안내"
+            title: "쇼핑몰 할인 정보",
+            description: "인기 쇼핑몰의 할인 행사 및 프로모션 정보 안내"
         },
         {
             icon: <LocalOffer sx={{ fontSize: 40, color: '#F29727' }}/>,
-            title: "카테고리별 할인",
+            title: "카테고리별 맞춤 정보",
             description: "식품, 생활용품, 가전제품 등 분야별 맞춤 할인 정보"
         },
         {
             icon: <NotificationsActive sx={{ fontSize: 40, color: '#F29727' }}/>,
-            title: "타임세일 알림",
-            description: "놓치면 후회하는 파격 타임세일 실시간 알림 서비스"
+            title: "놓치면 아쉬운 핫딜",
+            description: "한정 수량 특가 및 타임세일 빠른 알림 서비스"
         },
         {
             icon: <PriceCheck sx={{ fontSize: 40, color: '#F29727' }}/>,
-            title: "가격 비교 분석",
-            description: "동일 상품의 플랫폼별 가격 비교로 현명한 소비 안내"
+            title: "정확한 가격 정보",
+            description: "플랫폼별 가격 비교로 현명한 소비를 돕는 정보 제공"
         }
     ];
 
@@ -257,6 +257,7 @@ export default function Main() {
                 >
                     <Box textAlign="center" mb={12}>
                         <Logo src={dailySaleLogo} alt="Daily Sale Logo" />
+                        // 메인 타이틀 및 설명 문구 수정
                         <Typography
                             variant="h2"
                             gutterBottom
@@ -268,7 +269,7 @@ export default function Main() {
                                 WebkitTextFillColor: 'transparent',
                             }}
                         >
-                            매일 세상의 모든 할인정보
+                            매일 엄선된 알짜 할인정보
                         </Typography>
                         <Typography
                             variant="h3"
@@ -289,8 +290,8 @@ export default function Main() {
                                 fontSize: { xs: '1.1rem', md: '1.3rem' }
                             }}
                         >
-                            특가 세일부터 숨겨진 할인 코드까지<br />
-                            현명한 소비를 위한 모든 정보를 매일 아침 전해드립니다
+                            무수한 할인 정보 중 진짜 가치 있는 정보만<br />
+                            엄격하게 선별하여 매일 아침 정리해 보내드립니다
                         </Typography>
                     </Box>
 
@@ -304,10 +305,10 @@ export default function Main() {
                                         fontWeight="bold"
                                         sx={{ color: '#F29727' }}
                                     >
-                                        매일 큐레이션된 할인 정보
+                                        스마트한 할인 정보 알림 서비스
                                     </Typography>
                                     <Typography variant="h6" color="text.secondary">
-                                        세일 정보를 찾아 헤매는 시간을 아껴드립니다
+                                        중요한 할인 정보만 골라 시간과 비용을 절약해드립니다
                                     </Typography>
                                 </Box>
 
