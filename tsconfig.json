@@ -21,7 +21,6 @@
     "jsx": "react-jsx",
     "baseUrl": "src",
     "paths": {
-      "@/*": ["*"]
     },
     "noImplicitAny": true,
     "noImplicitThis": true,
