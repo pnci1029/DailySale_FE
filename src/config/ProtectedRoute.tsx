@@ -24,8 +24,7 @@ const ProtectedRoute = ({ children }) => {
         try {
             setToken();
             const result: UserDTO = await dispatch(getCurrentUserAsync()).unwrap();
-            // setIsAdmin(result.role === 'ADMIN' ? AuthType.ADMIN : AuthType.NOT_ADMIN);
-            setIsAdmin(AuthType.ADMIN);
+            setIsAdmin(result.role === 'ADMIN' ? AuthType.ADMIN : AuthType.NOT_ADMIN);
         } catch (err: any) {
             console.log(err.message || 'Failed to sign up');
             setIsAdmin(AuthType.NOT_LOGIN);
