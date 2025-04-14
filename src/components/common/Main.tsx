@@ -26,20 +26,22 @@ import {Discount, Email, NotificationsActive} from '@mui/icons-material';
 import {ComponentHelmet} from "../../components/common/ComponentHelmet";
 import {ChatBot} from "../../components/common/main/ChatBot";
 import {FeatureCard, Logo, StyledDialog, StyledPaper, SubmitButton, TermsBox} from "./hooks/MainStyledComponents";
-import {useMainAnimation} from "./hooks/useMainAnimation";
+import {BackgroundAnimationContainer} from "./hooks/MainStyledAnimation";
+import {ResponseDTO} from "../../types/common";
+import {NewsLetterFrequency, SubscribePostDTO} from "../../types/subscribe";
 
 
 export default function Main() {
     const [email, setEmail] = useState("");
-    const [frequency, setFrequency] = useState<'weekly' | 'daily'>('daily');
+    const [frequency, setFrequency] = useState<NewsLetterFrequency>(NewsLetterFrequency.WEEKLY_ONCE);
     const [termsAgreed, setTermsAgreed] = useState(false);
     const [marketingAgreed, setMarketingAgreed] = useState(false);
     const [openTermsModal, setOpenTermsModal] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
-    const { AnimatedBackground } = useMainAnimation();
 
-    const handleOpenTermsModal = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleOpenTermsModal = async (e: React.FormEvent<HTMLFormElement>) => {
+
         e.preventDefault();
         setError(''); // 이전 오류 초기화
 
@@ -54,6 +56,19 @@ export default function Main() {
 
         if (!emailRegex.test(email)) {
             setError("올바른 이메일 형식이 아닙니다.");
+            return;
+        }
+
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/subscribe/${email}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        const responseData: ResponseDTO<boolean> = await response.json();
+        if (!responseData.data) {
+            setError("이미 구독중인 이메일입니다.");
             return;
         }
 
@@ -73,7 +88,7 @@ export default function Main() {
     };
 
     const handleFrequencyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFrequency(event.target.value as 'weekly' | 'daily');
+        setFrequency(event.target.value as NewsLetterFrequency.WEEKLY_ONCE | NewsLetterFrequency.WEEKLY_FIVE);
     };
 
     const handleSubmit = async () => {
@@ -83,10 +98,10 @@ export default function Main() {
 
         try {
             // 서버 요청 데이터 준비
-            const requestData = {
+            const requestData: SubscribePostDTO = {
                 userEmail: email,
                 frequency: frequency,
-                marketingAgreed: marketingAgreed ? 'Y' : 'N'
+                isMarketingAgreed: marketingAgreed,
             };
 
             // 구독 API 호출
@@ -159,20 +174,7 @@ export default function Main() {
             <ParticleBackground />
             <CloudBackground />
 
-            {/* 애니메이션 요소들 - 메모이제이션된 컴포넌트 사용 */}
-            <Box sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                zIndex: 1,
-                overflow: 'hidden',
-                pointerEvents: 'none', // 포인터 이벤트 제거
-                userSelect: 'none' // 사용자 선택 방지
-            }}>
-                <AnimatedBackground />
-            </Box>
+            <BackgroundAnimationContainer />
 
             <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
                 <motion.div
@@ -330,6 +332,7 @@ export default function Main() {
                                             sx={{
                                                 background: 'linear-gradient(45deg, #F29727 30%, #FFCD00 90%)',
                                                 color: 'white',
+                                                marginTop: '20px',
                                                 height: '60px',
                                                 fontSize: '1.1rem',
                                                 '&:hover': {
@@ -372,7 +375,9 @@ export default function Main() {
                                     <Paper
                                         sx={{
                                             p: 2,
-                                            border: frequency === 'weekly' ? '2px solid #F29727' : '1px solid #ddd',
+                                            border: frequency === NewsLetterFrequency.WEEKLY_ONCE
+                                                ? '2px solid #F29727'
+                                                : '1px solid #ddd',
                                             borderRadius: '10px',
                                             transition: 'all 0.2s ease',
                                             cursor: 'pointer',
@@ -381,10 +386,10 @@ export default function Main() {
                                                 boxShadow: '0 3px 10px rgba(242, 151, 39, 0.15)',
                                             }
                                         }}
-                                        onClick={() => setFrequency('weekly')}
+                                        onClick={() => setFrequency(NewsLetterFrequency.WEEKLY_ONCE)}
                                     >
                                         <FormControlLabel
-                                            value="weekly"
+                                            value="WEEKLY_ONCE"
                                             control={<Radio />}
                                             label="주 1회 (토요일)"
                                         />
@@ -394,7 +399,9 @@ export default function Main() {
                                     <Paper
                                         sx={{
                                             p: 2,
-                                            border: frequency === 'daily' ? '2px solid #F29727' : '1px solid #ddd',
+                                            border: frequency === NewsLetterFrequency.WEEKLY_FIVE
+                                                ? '2px solid #F29727'
+                                                : '1px solid #ddd',
                                             borderRadius: '10px',
                                             transition: 'all 0.2s ease',
                                             cursor: 'pointer',
@@ -403,10 +410,10 @@ export default function Main() {
                                                 boxShadow: '0 3px 10px rgba(242, 151, 39, 0.15)',
                                             }
                                         }}
-                                        onClick={() => setFrequency('daily')}
+                                        onClick={() => setFrequency(NewsLetterFrequency.WEEKLY_FIVE)}
                                     >
                                         <FormControlLabel
-                                            value="daily"
+                                            value="WEEKLY_FIVE"
                                             control={<Radio />}
                                             label="주 5회 (월~금)"
                                         />
