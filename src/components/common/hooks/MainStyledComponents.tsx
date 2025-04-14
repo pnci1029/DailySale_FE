@@ -1,5 +1,5 @@
 import {styled} from "@mui/material/styles";
-import {Paper} from "@mui/material";
+import {Box, Button, Dialog, Paper} from "@mui/material";
 
 export function MainStyledComponents() {
 
@@ -36,7 +36,7 @@ export const StyledPaper = styled(Paper)`
     }
 `;
 
-export const FeatureCard = styled(Paper)(({ theme }) => ({
+export const FeatureCard = styled(Paper)(({theme}) => ({
     padding: theme.spacing(3),
     height: '100%',
     background: 'rgba(255, 255, 255, 0.85)',
@@ -63,3 +63,59 @@ export const FeatureCard = styled(Paper)(({ theme }) => ({
         }
     }
 }));
+
+// 모달 관련 스타일 컴포넌트
+export const StyledDialog = styled(Dialog)(({theme}) => ({
+    '& .MuiPaper-root': {
+        borderRadius: '20px',
+        padding: theme.spacing(1),
+        boxShadow: '0 8px 30px rgba(242, 151, 39, 0.25)',
+        maxWidth: '500px',
+        width: '100%',
+    },
+    '& .MuiDialogTitle-root': {
+        background: 'linear-gradient(45deg, #F29727 30%, #FFCD00 90%)',
+        color: 'white',
+        padding: theme.spacing(2, 3),
+        borderRadius: '20px 20px 0 0',
+    },
+    '& .MuiDialogContent-root': {
+        padding: theme.spacing(3),
+    },
+    '& .MuiDialogActions-root': {
+        padding: theme.spacing(2, 3, 3),
+    },
+}));
+
+export const TermsBox = styled(Box)(({theme}) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    border: '1px solid rgba(242, 151, 39, 0.3)',
+    borderRadius: '10px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    '&:hover': {
+        background: 'rgba(242, 151, 39, 0.05)',
+    },
+}));
+
+export const SubmitButton = styled(Button)({
+    background: 'linear-gradient(45deg, #F29727 30%, #FFCD00 90%)',
+    border: 0,
+    borderRadius: '30px',
+    color: 'white',
+    height: 48,
+    padding: '0 30px',
+    boxShadow: '0 3px 10px rgba(242, 151, 39, 0.3)',
+    '&:hover': {
+        background: 'linear-gradient(45deg, #E18617 30%, #EFBD00 90%)',
+        boxShadow: '0 5px 15px rgba(242, 151, 39, 0.4)',
+    },
+    '&.Mui-disabled': {
+        background: '#cccccc',
+        color: '#999999',
+    },
+});

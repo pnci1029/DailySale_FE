@@ -1,22 +1,45 @@
 import React, {useState} from 'react';
-import {Alert, Box, Button, Container, Grid, Snackbar, TextField, Typography,} from '@mui/material';
+import {
+    Alert,
+    Box,
+    Button,
+    Checkbox,
+    Container,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Divider,
+    FormControlLabel,
+    Grid,
+    Paper,
+    Radio,
+    RadioGroup,
+    Snackbar,
+    TextField,
+    Typography
+} from '@mui/material';
 import {motion} from 'framer-motion';
 import saleHeroIco from '../../assets/img/sale_hero.png';
 import {CloudBackground} from './CloudBackground';
 import {ParticleBackground} from './ParticleBackground';
-import {Discount, NotificationsActive} from '@mui/icons-material';
+import {Discount, Email, NotificationsActive} from '@mui/icons-material';
 import {ComponentHelmet} from "../../components/common/ComponentHelmet";
 import {ChatBot} from "../../components/common/main/ChatBot";
-import {FeatureCard, Logo, StyledPaper} from "./hooks/MainStyledComponents";
+import {FeatureCard, Logo, StyledDialog, StyledPaper, SubmitButton, TermsBox} from "./hooks/MainStyledComponents";
 import {useMainAnimation} from "./hooks/useMainAnimation";
 
+
 export default function Main() {
-    const [email, setEmail] = useState("")
+    const [email, setEmail] = useState("");
+    const [frequency, setFrequency] = useState<'weekly' | 'daily'>('daily');
+    const [termsAgreed, setTermsAgreed] = useState(false);
+    const [marketingAgreed, setMarketingAgreed] = useState(false);
+    const [openTermsModal, setOpenTermsModal] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const { AnimatedBackground } = useMainAnimation();
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleOpenTermsModal = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError(''); // 이전 오류 초기화
 
@@ -34,10 +57,36 @@ export default function Main() {
             return;
         }
 
+        setOpenTermsModal(true);
+    };
+
+    const handleCloseTermsModal = () => {
+        setOpenTermsModal(false);
+    };
+
+    const handleTermsAgreement = () => {
+        setTermsAgreed(!termsAgreed);
+    };
+
+    const handleMarketingAgreement = () => {
+        setMarketingAgreed(!marketingAgreed);
+    };
+
+    const handleFrequencyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFrequency(event.target.value as 'weekly' | 'daily');
+    };
+
+    const handleSubmit = async () => {
+        if (!termsAgreed) {
+            return; // 필수 약관에 동의하지 않았으면 제출 불가
+        }
+
         try {
             // 서버 요청 데이터 준비
             const requestData = {
                 userEmail: email,
+                frequency: frequency,
+                marketingAgreed: marketingAgreed ? 'Y' : 'N'
             };
 
             // 구독 API 호출
@@ -57,6 +106,9 @@ export default function Main() {
 
             // 성공 처리
             setEmail("");
+            setTermsAgreed(false);
+            setMarketingAgreed(false);
+            setOpenTermsModal(false);
             setOpenSnackbar(true);
 
         } catch (error) {
@@ -220,7 +272,7 @@ export default function Main() {
                                     ))}
                                 </Grid>
 
-                                <form onSubmit={handleSubmit}>
+                                <form onSubmit={handleOpenTermsModal}>
                                     <Box sx={{position: 'relative'}}>
                                         <TextField
                                             fullWidth
@@ -295,6 +347,146 @@ export default function Main() {
                     </Grid>
                 </motion.div>
             </Container>
+
+            {/* 약관 동의 모달 */}
+            <StyledDialog
+                open={openTermsModal}
+                onClose={handleCloseTermsModal}
+                maxWidth="md"
+            >
+                <DialogTitle>
+                    <Typography variant="h5" fontWeight="bold">구독 약관 동의</Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <Box sx={{ mt: 2, mb: 3 }}>
+                        <Typography variant="h6" gutterBottom sx={{ color: '#F29727' }}>
+                            수신 빈도 선택
+                        </Typography>
+                        <RadioGroup
+                            value={frequency}
+                            onChange={handleFrequencyChange}
+                            sx={{ mt: 1 }}
+                        >
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            border: frequency === 'weekly' ? '2px solid #F29727' : '1px solid #ddd',
+                                            borderRadius: '10px',
+                                            transition: 'all 0.2s ease',
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                borderColor: '#F29727',
+                                                boxShadow: '0 3px 10px rgba(242, 151, 39, 0.15)',
+                                            }
+                                        }}
+                                        onClick={() => setFrequency('weekly')}
+                                    >
+                                        <FormControlLabel
+                                            value="weekly"
+                                            control={<Radio />}
+                                            label="주 1회 (토요일)"
+                                        />
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            border: frequency === 'daily' ? '2px solid #F29727' : '1px solid #ddd',
+                                            borderRadius: '10px',
+                                            transition: 'all 0.2s ease',
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                borderColor: '#F29727',
+                                                boxShadow: '0 3px 10px rgba(242, 151, 39, 0.15)',
+                                            }
+                                        }}
+                                        onClick={() => setFrequency('daily')}
+                                    >
+                                        <FormControlLabel
+                                            value="daily"
+                                            control={<Radio />}
+                                            label="주 5회 (월~금)"
+                                        />
+                                    </Paper>
+                                </Grid>
+                            </Grid>
+                        </RadioGroup>
+                    </Box>
+
+                    <Divider sx={{ my: 3 }} />
+
+                    <Typography variant="h6" gutterBottom sx={{ color: '#F29727' }}>
+                        필수 약관 동의
+                    </Typography>
+
+                    <TermsBox onClick={handleTermsAgreement}>
+                        <Checkbox
+                            checked={termsAgreed}
+                            onChange={handleTermsAgreement}
+                            sx={{
+                                color: '#F29727',
+                                '&.Mui-checked': {
+                                    color: '#F29727',
+                                },
+                            }}
+                        />
+                        <Box sx={{ ml: 1 }}>
+                            <Typography variant="body1" fontWeight="medium">
+                                (필수) 서비스 이용약관 및 개인정보 처리방침에 동의합니다
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                                할인 정보 메일을 받기 위해 필요한 개인정보 수집에 동의합니다. 수집된 정보는 메일 전송 목적으로만 사용됩니다.
+                            </Typography>
+                        </Box>
+                    </TermsBox>
+
+                    <TermsBox onClick={handleMarketingAgreement}>
+                        <Checkbox
+                            checked={marketingAgreed}
+                            onChange={handleMarketingAgreement}
+                            sx={{
+                                color: '#F29727',
+                                '&.Mui-checked': {
+                                    color: '#F29727',
+                                },
+                            }}
+                        />
+                        <Box sx={{ ml: 1 }}>
+                            <Typography variant="body1" fontWeight="medium">
+                                (선택) 마케팅 및 이벤트 알림 수신에 동의합니다
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                                할인 정보 외 이벤트, 프로모션 등의 마케팅 정보를 제공받는 것에 동의합니다.
+                            </Typography>
+                        </Box>
+                    </TermsBox>
+                </DialogContent>
+
+                <DialogActions sx={{ px: 3, pb: 3, justifyContent: 'center' }}>
+                    <Button
+                        onClick={handleCloseTermsModal}
+                        sx={{
+                            borderRadius: '30px',
+                            px: 3,
+                            mr: 1,
+                            color: '#666'
+                        }}
+                    >
+                        취소
+                    </Button>
+                    <SubmitButton
+                        onClick={handleSubmit}
+                        disabled={!termsAgreed}
+                        startIcon={<Email />}
+                        sx={{ px: 4 }}
+                    >
+                        구독 메일 받기
+                    </SubmitButton>
+                </DialogActions>
+            </StyledDialog>
 
             <Snackbar
                 open={openSnackbar}
