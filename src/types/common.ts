@@ -1,5 +1,5 @@
-import {AdminUser} from "@/types/adminUser";
-import {HeaderStatus} from "@/components/common/Header";
+import {HeaderStatus} from "../components/common/Header";
+import {AdminUser} from "./adminUser";
 
 export enum Status {
     IDLE = "idle",

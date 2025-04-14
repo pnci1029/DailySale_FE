@@ -1,9 +1,9 @@
 import {useDispatch} from "react-redux";
 import {useCallback, useState} from "react";
 import {deletePostAsync, getPostAsync, getPostsAsync} from "../../../slice/postSlice";
-import {PageResponse} from "@/types/common";
-import {PostsDTO} from "@/types/post";
-import {CommunityCategories} from "@/types/community";
+import {PageResponse} from "../../../types/common";
+import { CommunityCategories } from "types/community";
+import {PostsDTO} from "../../../types/post";
 
 export function useCommunityGetter() {
     const dispatch = useDispatch<any>();

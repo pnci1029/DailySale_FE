@@ -1,5 +1,5 @@
-import {CommentPostDTO} from "@/types/post";
 import {MainApi} from "../api/MainApi";
+import {CommentPostDTO} from "../types/post";
 
 export class CommentApi {
     static url = `${process.env.REACT_APP_BASE_URL}/community/comment`;

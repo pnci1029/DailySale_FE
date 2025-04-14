@@ -12,7 +12,6 @@ import {Community} from './components/community/Community';
 import {CommunityForm} from './components/community/CommunityForm';
 import {CommunityDetail} from "./components/community/CommunityDetail";
 import {SignIn} from './components/auth/SignIn';
-import {MyPage} from "./components/MyPage";
 import {HelmetProvider} from 'react-helmet-async';
 import {TermsAndConditions} from './components/legal/TermsAndConditions';
 import {PrivacyPolicy} from './components/legal/PrivacyPolicy';
@@ -36,10 +35,10 @@ const router = createBrowserRouter([
         path: "",
         element: <Main />
       },
-        {
-        path: "my-page",
-        element: <MyPage />
-      },
+      //   {
+      //   path: "my-page",
+      //   element: <MyPage />
+      // },
       {
         path: "community",
         element: <Community />

@@ -1,7 +1,7 @@
 import style from "../../assets/scss/sub/community.module.scss";
-import {CommunityFormProps} from "@/types/community";
 import {useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
+import {CommunityFormProps} from "../../types/community";
 
 export function CommunityEmpty() {
     const navigate = useNavigate()

@@ -1,6 +1,5 @@
 // api.ts
 
-import {ApiResponse, UserInfoDTO} from "@/types/userInfo";
 
 export const userInfoApi = {
     // async submitUserInfo(data: UserInfoDTO): Promise<ApiResponse<UserInfoDTO>> {

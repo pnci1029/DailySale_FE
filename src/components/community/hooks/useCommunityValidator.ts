@@ -1,6 +1,6 @@
 import {useCallback, useState} from "react";
 import {ValidateStatus} from "../../../types/signup";
-import {CommunityCategories} from "@/types/community";
+import {CommunityCategories} from "../../../types/community";
 
 interface Args{
   title: string;

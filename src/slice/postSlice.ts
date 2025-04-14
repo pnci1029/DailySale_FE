@@ -1,8 +1,8 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {executePromise} from "../util/sliceUtil";
-import {CommunitySubmitDTO} from "@/types/post";
 import {PostApi} from "../api/PostApi";
-import {CommunityCategories} from "@/types/community";
+import {CommunityCategories} from "../types/community";
+import {CommunitySubmitDTO} from "../types/post";
 
 export const createPostAsync = createAsyncThunk("user/createPost",
     (dto: CommunitySubmitDTO) => executePromise(PostApi.createPost(dto)));

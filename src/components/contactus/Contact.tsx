@@ -1,21 +1,9 @@
 import React, {useState} from 'react';
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  IconButton,
-  Paper,
-  Snackbar,
-  TextField,
-  Typography,
-  Alert
-} from '@mui/material';
+import {Alert, Box, Button, Container, Grid, IconButton, Paper, Snackbar, TextField, Typography} from '@mui/material';
 import {AccessTime, Email, LocationOn, Phone, Send,} from '@mui/icons-material';
 import {motion} from 'framer-motion';
-import styles from '../../assets/scss/sub/contactus.module.scss';
 import {ComponentHelmet} from "../../components/common/ComponentHelmet";
-import {InquiryPostDTO} from "@/types/inquiry";
+import {InquiryPostDTO} from "../../types/inquiry";
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({

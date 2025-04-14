@@ -1,10 +1,10 @@
 import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import {useDispatch} from "react-redux";
-import {AppDispatch} from "@/store/store";
 import {getCurrentUserAsync} from "../../slice/AuthSlice";
-import {UserDTO} from "@/types/auth";
 import {MainApi} from "../../api/MainApi";
+import { UserDTO } from "types/auth";
+import {AppDispatch} from "../../store/store";
 
 export function Success() {
     const location = useLocation(); // 현재 URL 정보를 가져옴

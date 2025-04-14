@@ -1,6 +1,6 @@
-import {CommunitySubmitDTO} from "@/types/post";
 import {MainApi} from "../api/MainApi";
-import {CommunityCategories} from "@/types/community";
+import {CommunitySubmitDTO} from "../types/post";
+import {CommunityCategories} from "../types/community";
 
 export class PostApi{
     static url = `${process.env.REACT_APP_BASE_URL}/community`;

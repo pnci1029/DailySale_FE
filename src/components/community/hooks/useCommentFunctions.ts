@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import {useCallback} from "react";
 import {createCommentAsync} from "../../../slice/commentSlice";
-import {CommentPostDTO} from "@/types/post";
+import {CommentPostDTO} from "../../../types/post";
 
 export function useCommentFunctions() {
     const dispatch = useDispatch<any>();

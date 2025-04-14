@@ -1,10 +1,10 @@
 import {Navigate, useLocation} from 'react-router-dom';
 import {useCallback, useEffect, useState} from "react";
-import {UserDTO} from "@/types/auth";
 import {getCurrentUserAsync} from "../slice/AuthSlice";
 import {useDispatch} from "react-redux";
-import {AppDispatch} from "@/store/store";
 import {useTokens} from "../config/useTokens";
+import {AppDispatch} from "../slice";
+import {UserDTO} from "../types/auth";
 
 enum AuthType {
     ADMIN = "ADMIN",
