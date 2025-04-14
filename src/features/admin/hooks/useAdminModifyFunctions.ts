@@ -1,5 +1,5 @@
 import {useCookieFunctions} from "../../../components/common/hooks/useCookieFunctions";
-import {ModifyAuthUser} from "@/types/adminUser";
+import {ModifyAuthUser} from "../../../types/adminUser";
 
 export function useAdminModifyFunctions() {
     const { getCookie } = useCookieFunctions();

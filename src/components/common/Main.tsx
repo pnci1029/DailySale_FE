@@ -1,180 +1,20 @@
-import React, {useState, useMemo} from 'react';
-import {Alert, Box, Button, Container, Grid, Paper, Snackbar, TextField, Typography,} from '@mui/material';
+import React, {useState} from 'react';
+import {Alert, Box, Button, Container, Grid, Snackbar, TextField, Typography,} from '@mui/material';
 import {motion} from 'framer-motion';
-import {styled} from '@mui/material/styles';
 import saleHeroIco from '../../assets/img/sale_hero.png';
 import {CloudBackground} from './CloudBackground';
 import {ParticleBackground} from './ParticleBackground';
-import {Discount, LocalOffer, NotificationsActive, PriceCheck, ShoppingCart} from '@mui/icons-material';
+import {Discount, NotificationsActive} from '@mui/icons-material';
 import {ComponentHelmet} from "../../components/common/ComponentHelmet";
 import {ChatBot} from "../../components/common/main/ChatBot";
-
-interface FormData {
-    email: string;
-    topics: string;
-}
-
-// Styled Components
-const Logo = styled('img')`
-    width: 180px;
-    height: auto;
-    margin-bottom: 1rem;
-    filter: drop-shadow(0 4px 8px rgba(242, 151, 39, 0.3));
-    transition: all 0.3s ease;
-
-    &:hover {
-        transform: scale(1.05) rotate(2deg);
-        filter: drop-shadow(0 6px 12px rgba(242, 151, 39, 0.4));
-    }
-`;
-
-const StyledPaper = styled(Paper)`
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease-in-out;
-    z-index: 3;
-    padding: 3rem;
-    border-radius: 20px;
-    border: 2px solid rgba(242, 151, 39, 0.4);
-    box-shadow: 0 8px 25px rgba(242, 151, 39, 0.2);
-
-    &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(242, 151, 39, 0.25);
-        border: 2px solid rgba(242, 151, 39, 0.6);
-    }
-`;
-
-const FeatureCard = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(3),
-    height: '100%',
-    background: 'rgba(255, 255, 255, 0.85)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: '20px',
-    border: '1px solid rgba(242, 151, 39, 0.2)',
-    transition: 'all 0.3s ease-in-out',
-    overflow: 'hidden',
-    position: 'relative',
-    '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '5px',
-        background: 'linear-gradient(90deg, #F29727, #FFCD00)',
-    },
-    '&:hover': {
-        transform: 'translateY(-5px) scale(1.02)',
-        boxShadow: '0 15px 30px rgba(242, 151, 39, 0.2)',
-        '& .MuiSvgIcon-root': {
-            transform: 'scale(1.1) rotate(5deg)',
-        }
-    }
-}));
-
-// 애니메이션 컴포넌트를 별도로 분리
-const AnimatedBackground = React.memo(() => {
-    // 애니메이션 항목들을 한 번만 생성
-    const fallingItems = useMemo(() => {
-        return Array.from({ length: 15 }).map((_, index) => ({
-            left: `${Math.random() * 100}%`,
-            fontSize: `${Math.random() * 30 + 20}px`,
-            rotateStart: Math.random() * 60 - 30,
-            rotateEnd: Math.random() * 360,
-            duration: Math.random() * 20 + 10,
-            delay: Math.random() * 10,
-            color: index % 3 === 0 ? '#F29727' : index % 3 === 1 ? '#FFCD00' : '#FFA41B',
-            emoji: index % 5 === 0 ? '🏷️' : index % 5 === 1 ? '💰' : index % 5 === 2 ? '🛒' : index % 5 === 3 ? '🔖' : '💯'
-        }));
-    }, []);
-
-    const starItems = useMemo(() => {
-        return Array.from({ length: 20 }).map((_, index) => ({
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            width: `${Math.random() * 10 + 3}px`,
-            height: `${Math.random() * 10 + 3}px`,
-            duration: Math.random() * 4 + 2,
-            delay: Math.random() * 2,
-            backgroundColor: index % 2 === 0 ? '#FFCD00' : '#F29727'
-        }));
-    }, []);
-
-    return (
-        <>
-            {/* 떨어지는 할인 태그 애니메이션 */}
-            {fallingItems.map((item, index) => (
-                <Box
-                    key={`discount-tag-${index}`}
-                    sx={{
-                        position: 'absolute',
-                        left: item.left,
-                        top: `-100px`,
-                        color: item.color,
-                        fontSize: item.fontSize,
-                        opacity: 0.6,
-                        transform: `rotate(${item.rotateStart}deg)`,
-                        animation: `fall-${index} ${item.duration}s linear ${item.delay}s infinite`,
-                        [`@keyframes fall-${index}`]: {
-                            '0%': {
-                                transform: `translateY(0) rotate(${item.rotateStart}deg)`,
-                                opacity: 0
-                            },
-                            '10%': {
-                                opacity: 0.6
-                            },
-                            '90%': {
-                                opacity: 0.6
-                            },
-                            '100%': {
-                                transform: `translateY(${window.innerHeight + 200}px) rotate(${item.rotateEnd}deg)`,
-                                opacity: 0
-                            }
-                        }
-                    }}
-                >
-                    {item.emoji}
-                </Box>
-            ))}
-
-            {/* 반짝이는 별 효과 */}
-            {starItems.map((item, index) => (
-                <Box
-                    key={`star-${index}`}
-                    sx={{
-                        position: 'absolute',
-                        left: item.left,
-                        top: item.top,
-                        width: item.width,
-                        height: item.height,
-                        borderRadius: '50%',
-                        backgroundColor: item.backgroundColor,
-                        animation: `twinkle-${index} ${item.duration}s ease-in-out ${item.delay}s infinite alternate`,
-                        [`@keyframes twinkle-${index}`]: {
-                            '0%': {
-                                opacity: 0.3,
-                                transform: 'scale(1)'
-                            },
-                            '100%': {
-                                opacity: 0.8,
-                                transform: 'scale(1.5)'
-                            }
-                        }
-                    }}
-                />
-            ))}
-        </>
-    );
-});
+import {FeatureCard, Logo, StyledPaper} from "./hooks/MainStyledComponents";
+import {useMainAnimation} from "./hooks/useMainAnimation";
 
 export default function Main() {
-    const [formData, setFormData] = useState<FormData>({
-        email: '',
-        topics: 'daily-sale',
-    });
+    const [email, setEmail] = useState("")
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
+    const { AnimatedBackground } = useMainAnimation();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -184,12 +24,12 @@ export default function Main() {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
         // 이메일 검증
-        if (!formData.email.trim()) {
+        if (!email.trim()) {
             setError("이메일을 입력해주세요.");
             return;
         }
 
-        if (!emailRegex.test(formData.email)) {
+        if (!emailRegex.test(email)) {
             setError("올바른 이메일 형식이 아닙니다.");
             return;
         }
@@ -197,11 +37,11 @@ export default function Main() {
         try {
             // 서버 요청 데이터 준비
             const requestData = {
-                user_email: formData.email,
+                userEmail: email,
             };
 
             // 구독 API 호출
-            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/subscriber/subscribers`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/subscribe`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -216,10 +56,7 @@ export default function Main() {
             }
 
             // 성공 처리
-            setFormData(prev => ({
-                ...prev,
-                email: '' // 이메일 입력란 초기화
-            }));
+            setEmail("");
             setOpenSnackbar(true);
 
         } catch (error) {
@@ -236,26 +73,26 @@ export default function Main() {
             title: "오늘의 특가 세일",
             description: "매일 엄선된 다양한 카테고리의 최저가 특가 정보"
         },
-        {
-            icon: <ShoppingCart sx={{ fontSize: 40, color: '#F29727' }}/>,
-            title: "쇼핑몰 할인 정보",
-            description: "인기 쇼핑몰의 할인 행사 및 프로모션 정보 안내"
-        },
-        {
-            icon: <LocalOffer sx={{ fontSize: 40, color: '#F29727' }}/>,
-            title: "카테고리별 맞춤 정보",
-            description: "식품, 생활용품, 가전제품 등 분야별 맞춤 할인 정보"
-        },
-        {
-            icon: <NotificationsActive sx={{ fontSize: 40, color: '#F29727' }}/>,
-            title: "놓치면 아쉬운 핫딜",
-            description: "한정 수량 특가 및 타임세일 빠른 알림 서비스"
-        },
-        {
-            icon: <PriceCheck sx={{ fontSize: 40, color: '#F29727' }}/>,
-            title: "정확한 가격 정보",
-            description: "플랫폼별 가격 비교로 현명한 소비를 돕는 정보 제공"
-        }
+        // {
+        //     icon: <ShoppingCart sx={{ fontSize: 40, color: '#F29727' }}/>,
+        //     title: "쇼핑몰 할인 정보",
+        //     description: "인기 쇼핑몰의 할인 행사 및 프로모션 정보 안내"
+        // },
+        // {
+        //     icon: <LocalOffer sx={{ fontSize: 40, color: '#F29727' }}/>,
+        //     title: "카테고리별 맞춤 정보",
+        //     description: "식품, 생활용품, 가전제품 등 분야별 맞춤 할인 정보"
+        // },
+        // {
+        //     icon: <NotificationsActive sx={{ fontSize: 40, color: '#F29727' }}/>,
+        //     title: "놓치면 아쉬운 핫딜",
+        //     description: "한정 수량 특가 및 타임세일 빠른 알림 서비스"
+        // },
+        // {
+        //     icon: <PriceCheck sx={{ fontSize: 40, color: '#F29727' }}/>,
+        //     title: "정확한 가격 정보",
+        //     description: "플랫폼별 가격 비교로 현명한 소비를 돕는 정보 제공"
+        // }
     ];
 
     return (
@@ -389,12 +226,9 @@ export default function Main() {
                                             fullWidth
                                             variant="outlined"
                                             placeholder="이메일 주소를 입력하세요"
-                                            value={formData.email}
+                                            value={email}
                                             onChange={(e) => {
-                                                setFormData(prev => ({
-                                                    ...prev,
-                                                    email: e.target.value
-                                                }));
+                                                setEmail(e.target.value)
                                                 setError(''); // 입력 시 오류 메시지 초기화
                                             }}
                                             error={!!error}
